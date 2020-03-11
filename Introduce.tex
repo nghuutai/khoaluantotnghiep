@@ -1,0 +1,60 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{vietnam}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Huu Tai}
+\usepackage{indentfirst}
+\usepackage{footnote}
+\begin{document}
+\section{Giới thiệu}
+Trong thời kỳ ngày càng phát triển của mạng internet thì việc chấm điểm tự động cho các bài tập lập trình ngày càng trở nên quan trọng hơn đặc biệt là khi có sự xuất hiện của các khóa học trực tuyến ngày càng phổ biến hoặc là các lớp học có sinh viên tham gia với số lượng lớn. Đánh giá là một phần không thể thiếu trong giáo dục và thường được sử dụng để đánh giá và cung cấp kết quả cho sinh viên tham gia vào môn học. Đồng thời dựa vào các kết quả đánh giá sau môn học của sinh viên mà giáo viên có thể xác định liệu chương trình giảng dạy có đáp ứng được nhu cầu cần thiết của sinh viên hay không.\newline  
+\indent Trong lĩnh vưc giáo dục tâm lý, người ta đã chứng minh rằng hầu hết sinh viên thường hướng những nỗ lực của họ dựa trên kết quả của các bài kiểm tra sau khi được đánh giá và ảnh hưởng của các kết quả đó đến kết quả cuối cùng của khóa học. Tuy nhiên việc đánh giá kết quả một cách thủ công cho một lớp học đòi hỏi rất nhiều công sức và rất dễ bị lỗi và việc đấy càng được thể hiện rõ ràng khi số lượng sinh viên trong một lớp học tăng lên. Lúc đó việc đánh giá kết quả của sinh viên đòi hỏi phải được giới hạn hoặc hợp lý hóa theo một cách nào đó.\newline
+\indent Trong thực tế hai giáo viên chấm cùng một môn rất hiếm khi áp dụng cùng một tiêu chí đánh giá trong mọi trường hợp. Điều này là không công bằng với sinh viên bởi vì điều đó có nghĩa là điểm đánh giá của học sinh có thể phụ thuộc vào từng giải pháp đánh giá của giáo viên mà không chỉ dựa vào giải pháp của học sinh. Và việc này càng xảy ra phổ biến trong việc đánh giá các bài tập lập trình.\newline
+\indent Thông thường sẽ có vô số giải pháp khả thi cho cùng một vấn đề vì có thể có thể có các biến thể trong các lập trình do đó một mẫu đánh giá sẽ cũng cấp hướng dẫn cho người đánh giá nhưng sẽ không bao quát hết tất các cả trường hợp. Điều đó đòi hỏi phải có một công cụ giúp đánh giá các bài kiểm tra một cách tự động và hơn hết là đảm bảo đánh giá một cách công bằng, khách quan và được áp dụng như nhau cho tất cả học sinh.\newline
+\indent Thách thức này đã dẫn đến sự phát triển của các công cụ chấm điểm tự động. Trong bài báo cáo này sẽ trình bày và so sánh các công cụ được sử dụng để chấm điểm tự động cho các bài tập lập trình.\newline
+\section{Các lỗi phần mềm}
+Trước khi trình bày về các kỹ thuật và hệ thống tự động đánh giá tôi muốn giới thiệu các lỗi thường được xem xét đến bởi các kỹ thuật này. Lỗi phần mềm được định nghĩa là tạo ra kết quả sai hoặc thực hiện một hành động theo cách không lường trước được. Lỗi phần mềm được phân loại thành các lỗi như: Lỗi cú pháp, lỗi logic và lỗi thời gian chạy.\newline
+\subsection{Lỗi cú pháp}
+Lỗi này được phát hiện khi cú pháp không chính xác trong ngôn ngữ lập trình, ví dụ như cấu trúc chương trình không chính xác, các từ sai, thiếu dấu chấm phẩy. Loại lỗi này có thể được trình biên dịch ngôn ngữ lập trình phát hiện trong khi biên dịch mã phần mềm. Lỗi này là lỗi dễ phát hiện và sửa nhất vì hầu hết các trình biên dịch được sử dụng ngày nay.\newline
+\subsection{Lỗi logic}
+Khi mắc lỗi này phần mềm biên dịch vẫn chạy tốt nhưng đầu ra của phần mềm bị sai do nhiều lý do như sai về yêu cầu hoặc đặc tả, lỗi toán học (chia cho 0). Vì lỗi này không được trình biên dịch phát hiện nên ta cần phát hiện các lỗi này trước khi khởi chạy phần mềm.\newline
+\subsection{Lỗi thời gian chạy}
+Đây là lỗi nâng cao và rất hiếm khi sinh viên bị rơi vào. Lỗi thời gian chạy chỉ xảy ra khi phần mềm đang chạy. Trong thực tế đây là một trong những vấn đề phức tạp nhất để theo dõi và dẫn đến sự cố phần mềm.\newline
+\section{Lợi ích của việc sử dụng đánh giá tự động}
+Việc áp dụng các hệ thống tự động đánh giá vào trong các khóa học đem lại các lợi ích sau:
+\begin{itemize}
+\item[-] \textbf{Tốc độ}: Giúp cho việc đánh giá nhanh hơn nhiều và sinh viên sẽ nhận được kết quả ngay sau kỳ thi. Khi sử dụng đánh giá thủ công thì sinh viên cần chờ một khoảng thời gian rất lâu để nhận được kết quả đánh giá của bài kiểm tra. Ngược lại với hệ thống đánh giá tự động, các sinh viên có thể tự đánh giá bài kiểm tra của mình, biết điểm của họ và sửa lỗi của chính họ.
+\item[-] \textbf{Công bằng}: Các lỗi tương tự sẽ được đánh giá như nhau và giáo viên sẽ không ảnh hưởng đến việc chấm điểm.
+\item[-] \textbf{Độc lập}: Việc đánh giá một bài kiểm tra không bị ảnh hưởng từ kết quả của các bài kiểm tra trước đó. Trong đánh giá thủ công, một bài kiểm tra lúc trước có kết quả không tốt có thê khiến giá viên chủ quan coi bài kiểm tra tiếp theo là không tốt.
+\end{itemize}
+\section{Các kỹ thuật được sử dụng trong đánh giá tự động}
+\begin{itemize}
+\item[-] \textbf{Unit testing}: Mục tiêu chính của bất kỳ phương pháp kiểm thử phần mềm là kiểm tra phần mềm đó có lỗi hay không, có tạo ra kết quả đầu ra đúng không và có tuân theo các thông số kỹ thuật được thực hiện bởi người kiểm thử phần mềm hay không. Unit testing đã đạt được sự nổi bật trong lĩnh vực khoa học máy tính và đó là một trong những phương pháp phổ biến nhất được sử dụng hiện nay để kiểm tra các đơn vị hoặc tính năng của phần mềm. Trong Unit testing, phần mềm được yêu cầu phải không bị lỗi cú pháp. Đầu ra của Unit testing cung cấp câu trả lời đúng hay sai. Người kiểm thử có trách nhiệm chuẩn bị các test case để thử nghiệm bao phủ tất cả các khía cạnh của đơn vị hoặc chức năng cần kiểm thử.
+\item[-] \textbf{Sketching Synthesis  and Error Statistical Modeling (ESM)}: Là một công cụ để cung cấp phản hồi tức thì cho các bài tập lập trình. Ý tưởng chính đằng sau phương pháp này là cung cấp cho hệ thống một triển khai tham chiếu cho một vấn đề tính toán đơn giản như là ‘compute derivatives’. Công cụ này còn các hạn chế như: không kiểm tra các yêu cầu cấu trúc, không chấp nhận giá trị lớn, không hỗ trợ OOP.
+\item[-] \textbf{Peer-To-Peer Feedback}: Phương pháp này người hướng dẫn làm cho sinh viên xếp loại ngẫu nhiên các câu trả lời khác nhau. Cách tiếp cận này có giúp cho sinh viên làm quen với các nguyên nhân lỗi, nhưng có các vấn đề gặp phải trong các hệ thống sử dụng phương pháp này như không có phản hồi cá thể làm cho sinh viên có thể đợi trong thời gian dài để nhận phản hồi và phản hồi sai hoặc không đầy đủ do kiến thức của sinh viên còn hạn chế.
+\item[-] \textbf{Random Inputs Test Cases}: Phương pháp này đòi hỏi người hướng dẫn chuẩn bị một bộ đầu vào độc lập được sử dụng để kiểm tra đầu ra bài tập của sinh viên là đúng hay sai. Tuy nhiên khi sử dụng phương pháp này thì sinh viên sẽ không nhận được bất kỳ phản hồi nào cho thấy lỗi của sinh viên. Mục tiêu của bài kiểm tra này là kiểm tra xem sinh viên đã xác định đầu ra chính xác hay chưa vì vậy đối với phương pháp này sinh viên sẽ chỉ có 2 kết quả là đúng hoặc sai.
+\item[-] \textbf{Pattern Matching}: Phương pháp này, người hướng dẫn cung cấp một đặc tả đầu của đầu ra rằng một phép gán đúng sẽ được giả sử để tạo ra và hệ thống yêu cầu các các công cụ Unix Lẽ và Yacc để tạo một chương trình xác minh rằng đầu ra từ các giải pháp của sinh viên gửi lên. Kỹ thuật này có nhiều nhước điểm vì nó chỉ chấp nhận và đưa ra một mức độ cho các giải pháp phù hợp hoàn hảo. Giáo viên hướng dẫn không thể phá vỡ mô hình để phân phối điểm trên các phương thức.
+\end{itemize}
+\begin{table}[ht]
+	\centering
+\begin{tabular}{|m{2.5cm}||m{2.5cm}||m{2.5cm}||m{2.5cm}||m{2.5cm}||m{2.5cm}|}
+\hline 
+Tool and Techniques & Sketching synthesis and error statistical modeling & Peer-to-peer feedback & Random input test cases & Pattern Matching & Unit testing\\ 
+\hline 
+Execution time & Nhanh (dưới 10 giây trong nhiều trường hợp) & Trung bình từ 40-60 giây & Chậm, mất nhiều giờ trong nhiều trường hợp & Nhanh (dưới 10 giây trong nhiều trường hợp) & Trung bình mất 30 giây\\ 
+\hline 
+Reliability & Chính xác (phụ thuộc vào test case được viết) & Có thể phát hiện 64\% lỗi & Không đáng tin cậy, nó phụ thuộc vào kiến thức của sinh viên & Trong một vài trường hợp (nếu tất cả đầu vào được bao phủ) & Trong một vài trường hợp (nếu tất cả đầu ra được bao phủ)\\
+\hline
+Dependency Test & Được hỗ trợ & Được hỗ trợ & Được hỗ trợ & Không hỗ trợ & Không hỗ trợ\\
+\hline
+Instant Feedback & Có & Có & Không & Có & Có\\
+\hline
+Support Oop & Có & Không & Có & Không & Không\\
+\hline
+\end{tabular}
+\caption{Bảng so sánh các công cụ và kỹ thuật dùng trong Grade Student’Java Assessments.}
+\end{table}
+\end{document}
