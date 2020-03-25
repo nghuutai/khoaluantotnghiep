@@ -8,6 +8,7 @@
 \author{Huu Tai}
 \usepackage{indentfirst}
 \usepackage{footnote}
+\usepackage{graphicx}
 \begin{document}
 \section{Giới thiệu}
 Trong thời kỳ ngày càng phát triển của mạng internet thì việc chấm điểm tự động cho các bài tập lập trình ngày càng trở nên quan trọng hơn đặc biệt là khi có sự xuất hiện của các khóa học trực tuyến ngày càng phổ biến hoặc là các lớp học có sinh viên tham gia với số lượng lớn. Đánh giá là một phần không thể thiếu trong giáo dục và thường được sử dụng để đánh giá và cung cấp kết quả cho sinh viên tham gia vào môn học. Đồng thời dựa vào các kết quả đánh giá sau môn học của sinh viên mà giáo viên có thể xác định liệu chương trình giảng dạy có đáp ứng được nhu cầu cần thiết của sinh viên hay không.\newline  
@@ -57,4 +58,42 @@ Support Oop & Có & Không & Có & Không & Không\\
 \end{tabular}
 \caption{Bảng so sánh các công cụ và kỹ thuật dùng trong Grade Student’Java Assessments.}
 \end{table}
+\section{Symbolic execution}
+\subsection{Giới thiệu}
+Trong hoạt động kiểm thử phần mềm, các ca kiểm thử thường được tạo ra một cách thủ công, gây tốn kém về chi phí cũng như thời gian để hoàn thành công đoạn này. Thực thi tượng trưng (Symbolic execution) được biết đến là một kỹ thuật nổi tiếng với khả năng tự động sinh những bộ test case có độ bao phủ cao với các tiêu chí kiểm thử nhằm phát hiện những lỗi sâu trong các hệ thống phần mềm phức tạp.\newline
+\indent Hiện nay có rất nhiều công cụ nền tảng phục vụ cho hoạt động kiểm thử phần mềm như JUnit cho ngôn ngữ Java, Nunit, VSUnit cho .NET để thực thi các ca kiểm thử ở mức đơn vị. Tuy nhiên các công cụ kiểm thử này không hỗ trợ việc sinh tự động các ca kiểm thử đơn vị. Viết các ca kiểm thử là một công việc nặng nhọc và tốn nhiều công sức. Có nhiều phương pháp khác nhau hỗ trợ việc sinh tự động các ca kiểm thử (Test case) giúp giảm chi phí và thời gian thực hiện đã được nghiên cứu và đưa ra như: Dựa trên mô hình (Model Checking), kiểm thử ngẫu nhiên (Random Testing [1]). Nhưng hạn chế của nó là kiểm tra cùng 1 hành vị thực thi của chương trình nhiều lần với những đầu vào khác nhau và chỉ có thể kiểm tra được một số trường hợp thực thi của chương trình. Thêm vào đó, kiểm thử ngẫu nhiên khó xác định được khi nào việc kiểm thử nên được dừng lại và nó không biết tại điểm nào không gian trạng thái đã được thám hiểm hết. Để xác định khi nào việc kiểm thử dừng lại thì hệ thống kiểm thử ngẫu nhiên được kết hợp với các tiêu chuẩn an toàn [3]. Để khắc phục những hạn chế của kiểm thử ngẫu nhiên, phương pháp thực thi tượng trưng xây dựng các ràng buộc trên các giá trị tượng trưng và giải các ràng buộc đó để sinh ra các giá trị đầu vào cho chương trình mà nó có thể bao phủ tất cả các dòng lệnh cũng như các nhánh thực thi của chương trình.\newline
+\indent Ý tưởng của thực thi tượng trưng đã được đề xuất bởi King [Comm. ACM 1976], Clarke [IEEE TSE 1976] nhưng việc hiện thực ý tưởng mới chỉ được thực hiện trong những năm gần đây qua tiến bộ đáng kể trong lý thuyết giải các ràng buộc (Constrain satisfiability) [11] và các tiếp cận mở rộng thực thi tượng trưng động (Dynamic symbolic execution), một kỹ thuật kết hợp giữa các giá trị cụ thể và giá trị tương trưng cho các giá trị đầu vào.\newline
+\subsection{Tổng quan về kỹ thuật thực thi tượng trưng}
+Ý tưởng chính của Symbolic execution là thực thi chương trình với các giá trị tượng trưng (Symbolic value) thay vì các giá trị cụ thể (concrete value) của các tham số đầu vào. Kết quả là giá trị đầu ra được tính toán bởi chương trình và được biểu diễn bởi bởi một biểu thức tượng trưng. Trong kiểm thử phần mềm, kỹ thuật Symbolic execution được sử dụng để sinh dữ liệu kiểm thử cho mỗi đường thực thi khác nhau của chương trình. Ví dụ trong hình 1 minh họa Symbolic execution.\newline
+\indent Trong quá trình thực thi tượng trưng, việc đi theo một nhánh cụ thể nào đó không phụ thuộc vào các giá trị của các tham số đầu vào. Tại tất cả các điểm rẽ nhánh, tất cả các nhánh sẽ được xem xét và kiểm tra nhằm định hướng cho thực thi tiếp theo của chương trình. Với những chương trình ở dạng đơn giản có hại loại thực thi chủ yếu: đó là câu lệnh gán và câu lệnh rẽ nhánh. Tại các câu lệnh gán, giá trị tượng trưng của biến chương trình cũng như các tham số đầu vào có liên quan đến câu lệnh đó được tính toán và cập nhập lại, còn tại các điểm rẽ nhánh, chương trình sẽ điều khiển thực thi theo cả hai nhánh tương ứng đồng thời ràng buộc đường đi (Path condition) tương ứng với hai nhánh sẽ được tạo ra. Một ràng buộc là một biểu thức điều kiện tương ứng với giá trị true, ràng buộc kia tương ứng với giá trị false của biểu thức ràng buộc. Các ràng buộc này sẽ được cập nhập vào đường đi tương ứng với nhánh đó. Các ràng buộc này sẽ được xen xét bởi một bộ giải ràng buộc để đánh giá xem đường đi tiếp theo có khả thi không hay nói một cách khác là kiểm tra xem có tồn tại bộ giá trị thõa mãn ràng buộc này hay không. Nếu không thõa màn thì ràng buộc sẽ đánh giá là sai, khi đó Symbolic execution sẽ dừng hoặc quay lui thực thi theo nhánh khả thi.\newline
+\begin{figure}[ht]
+\begin{center}
+\includegraphics{hinhanh/hinh1}
+\end{center}
+\caption{Ví dụ cho symbolic execution}
+\end{figure}
+\indent Các ràng buộc đường đi được tạo ra bằng cách thu gom các điều kiện trên đường đi tương ứng. Giải các ràng buộc này sẽ sinh ra các giá trị cụ thể cho các tham số đầu vào tương ứng với từng nhánh thực thi của chương trình.\newline
+\indent Tất cả các đường thực thi của chương trình có thể biểu diễn bởi một cấu trúc cây gọi là cây thực thi (Tree execution). Hình 2 là cây thực thi tượng trưng cho hàm testme() trong hình 1. Các cạnh của cây biểu diễn cho sự chuyển đổi từ trạng thái này sang trạng thái khác. Với ví dụ trên phương thức testme() trong hình 1 sẽ có cây thực thi mô tả những đường thực thi của chương trình với các biến đầu vào là {x=0, y=1}, {x=2, y=1}, {x=30, y=15}, mục tiêu là sinh ra tập các ca kiểm thử thõa mãn thực thi cho tất cả các nhánh của chương trình phụ thuộc vào giá trị tượng trưng của các tham biến đầu vào nhiều nhất có thể trong một khoảng thời gian nhất định đảm báo khám phá chính xác tất cả các đường thực thi bởi một lần duy nhất với những giá trị đầu vào đã cho.\newline
+\begin{figure}[ht]
+\begin{center}
+\includegraphics{hinhanh/hinh2}
+\end{center}
+\caption{Cây Symbolic execution tương ứng với hàm testme() trong ví dụ 1}
+\end{figure}
+\indent Bắt đầu thực thi tượng trưng hàm testme() bằng việc gán giá trị cho các tham số đầu vào x và y lần lượt là $x_0$, $y_0$. Khởi tạo PC (Path condition) nhận giá trị là true, tới câu lệnh rẽ nhánh $if(2*y_0=x_0)$ hai nhanh của chương trình tương ứng đều được thực thi với các giá trị tương ứng là $x_0$ và $y_0$. Tại đây biểu thức điều kiện rẽ nhánh là $2*y_0=x_0$ và $!(2*y_0=x_0)$ được bổ sung và PC theo hai nhánh khác nhau. Sau khi thực thi câu lệnh $if(2*y_0=x_0)$ hàm testme() được thực thi theo nhánh mà tồn tại bộ giá trị x,y thõa mãn. Tương tự như trên, khi gặp câu lệnh $if(x_0>y_0+10)$ PC theo hai nhánh tương ứng sẽ được cập nhập bổ sung là $(2*y_0=x_0)$ \^{} $(x_0>y_0+10)$ và $(2*y_0=x_0)$\^{}$(x_0<y_0+10)$. Tại mỗi điểm rẽ nhánh PC sẽ được cập nhập và một thủ tục quyết định bằng bộ xử lý ràng buộc sẽ được sử dụng để xác định xem nhánh tương ứng với PC đó có khả thi hay không để điều hướng thực thi hiện thời đi theo nhánh đó. Nếu PC được đánh giá là không khả thi thực thi tượng trưng sẽ dừng hoặc quay lui, và thực thi tượng trưng chỉ thực thi chương trình tượng trưng theo nhánh mà PC được đánh giá là khả thi.\newline
+\indent Đối với những đoạn mã chứa vòng lặp hoặc lời gọi đệ quy mà đường thực thi là vô hạn và biến điều khiển của vòng lặp hoặc lời gọi đệ quy là tượng trưng. Ví dụ trong hình 3 sẽ là vô hạn đường thực thi với mỗi đường thực thi là 1 dãy tùy ý số lượng giá trị là true và sau cùng là false hoặc là một dãy vô hạn số lần lặp, khi đó PC của đường thực thị là một dãy gồm n giá trị true và sau cùng là false.\newline
+\begin{figure}[ht]
+\begin{center}
+\includegraphics{hinhanh/hinh3}
+\end{center}
+\caption{Ví dụ cho vòng lặp vô hạn}
+\end{figure}
+\indent Trên thực tế cần phải thêm các tiêu chí giới hạn cho việc tìm kiếm như thời gian thực thi, giới hạn chiều sâu của đường thực thi hoặc số lượng các vòng lặp lồng nhau.\newline
+\indent Nhược điểm chính của Symbolic execution truyền thống là không thể sinh dữ liệu test nếu không giải được biểu thức ràng buộc đường thực thi. Ví dụ nếu ta thay hàm twice() ở hình 1 bằng hàm twice() ở hình 4 sau khi thực hiện câu lệnh dòng 7 thì thực thi tượng trưng sẽ cho ra hai ràng buộc mới bổ sung $x_0$\#$y_0$*$y_0$\%50 và $x_0=y_0$*$y_0$\%$50$ và khi bộ giải ràng buộc không giải được ràng buộc trên thực thi tượng trưng sẽ thất bại trong việc sinh các dữ liệu kiểm thử cho chương trình sau khi đã được sửa đổi.\newline
+\begin{figure}[ht]
+\begin{center}
+\includegraphics{hinhanh/hinh4}
+\end{center}
+\caption{Ví dụ cho hàm twice()}
+\end{figure}
 \end{document}
