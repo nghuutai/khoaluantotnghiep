@@ -583,6 +583,361 @@ Sau khi đã có được các testcase chúng ta sẽ thay vào trong hàm get\
 
 Như mong đợi, chương trình của chúng tôi trả về 0 khi chạy trường hợp thử nghiệm đầu tiên, 1 khi chạy trường hợp thứ hai và 255 (-1 được chuyển đổi thành giá trị mã thoát hợp lệ trong phạm vi 0-255) khi chạy trường hợp cuối cùng.
 
+\subsubsection{Hàm tự sinh testcase}
+Như ở phần trên chúng ta đã tiến hành sinh testcase tự động với công cụ Klee. Đối với hàm get\_sign() ở phần trên tham số đầu vào của hàm chỉ là 1 số nguyên nên trong quá trình chạy thử nghiệm chúng ta đã nhận được kết quả đúng như mong muốn.  Đối với những hàm có tham số đầu vào phức tạp hơn, ví dụ như là một array có số phần tử là n thì Klee chưa tạo ra các bộ test case như  mong muốn. Ta xét ví dụ bên dưới:
+
+\begin{lstlisting}[language=c]
+int lon_nhi(int arr[], int n)
+{
+  int temp = 0, largest1 = 0, largest2 = 0;
+  largest1 = arr[0];
+  largest2 = arr[1];
+  if (largest1 < largest2)
+  { 
+    temp = largest1;
+    largest1 = largest2;
+    largest2 = temp;
+  }
+  
+  for (int i = 2; i < n; i++)
+  { 
+    if (arr[i] > largest1)
+    {   
+        largest2 = largest1;
+        largest1 = arr[i];
+    }
+    else if (arr[i] > largest2 && arr[i] != largest1)
+    {   
+        largest2 = arr[i];
+    }
+  }
+  return largest2;
+}
+\end{lstlisting}
+
+Đối với hàm lon\_nhi() với tham số đầu vào là một array và một số nguyên n, Klee không tạo ra được những bộ testcase như mọng đợi. Sau khi được biên dịch thành file bitcode, tôi tiến hành chạy file bitcode để có được output.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/runningkleearray.png}
+\end{center}
+\end{figure}
+
+Nhưng khi tiến hành chạy file bitcode như hình trên thì quá trình sinh test diễn ra liên tục và không kết thúc. 
+
+Để giải quyết vấn đề trên thì tôi tiên hành viết một hàm tự động sinh test ngẫu nhiên để có thể tạo ra các bộ testcase cho các bài tập có các tham số đầu vào là array. Hàm này sẽ được chạy đầu tiên trong công cụ chấm điểm để có thể tạo ra bộ các testcase cho phần chấm điểm bài lập trình.
+
+\begin{lstlisting}[language=c]
+void printRandoms(int lower, int upper, int count, FILE *out) 
+{ 
+    int i;
+    fprintf(out,"%d\n",count);
+    for (i = 0; i < count; i++) { 
+        int num = (rand() % (upper - lower + 1)) + lower; 
+        fprintf(out,"%d ",num); 
+    }
+    fprintf(out,"\n"); 
+} 
+
+int randomNumber(int lower, int upper)
+{
+    int num = (rand() % (upper - lower + 1)) + lower; 
+    return num;
+}
+
+void setup(int lower, int upper, int n, FILE *out)
+{
+    int count;
+    fprintf(out,"%d\n",n);
+    srand(time(0)); 
+    for(int i = 0; i < n; i++)
+    {
+        count = randomNumber(0, 10);
+        printRandoms(lower, upper, count, out);
+    } 
+    fclose(out);
+}
+\end{lstlisting}
+
+Hàm setup() bên trên có 4 tham số đầu vào, trong đó lower và upper dùng để giứoi hạn giá trị các phần tử trong mảng phải lớn hơn hoặc bằng lower và nhỏ hơn hoặc bằng upper. Tham số n dùng để giới hạn số bộ test được sinh ra. Con trỏ *out dùng để ghi kết quả các bộ testcase sinh được ra file text. Bên trong hàm setup() sẽ gọi 2 hàm con là hàm randomNumber() dùng để tạo ra sô phần tử trong một array và hàm printRandoms() dùng để sinh ra các bộ testcase tương ứng với số phần tử là giá trị của hàm randomNumber(). Các bộ testcase được sinh ra sẽ được ghi vào trong 1 file output với giá trị của dòng đầu tiên là số lượng các bộ testcase được sinh ra và các dòng tiếp theo sẽ là các bộ testcase.
+Sau khi có được file output công cụ sẽ tiến hành chấm điểm bài tập lập trình dựa trên các bộ testcase chứa trong file output đó.
+
+\subsection{Cách ra đề bài}
+Khi giáo viên tiến hành tạo đề bài sẽ tạo trước cho sinh viên một function prototype, function prototype này thể hiện tên của function sinh viên cần hoàn thành và các tham số đầu vào của function này. Nhiệm vụ của sinh viên là đọc hiểu để bài và hoàn thành nội dung bên trong của function.
+
+Cùng tìm hiểu qua ví dụ sau đây:
+
+Đề bài: Cho một mãng số nguyên có n phần tử. Sắp xếp mãng số nguyên đó theo thứ tự tăng dần.
+
+Ví dụ: Nếu cho một mãng sau arr = [3, 1, 7, 10, 2, 14], và sau khi được sắp xếp mãng đó sẽ trở thành arr = [1, 2, 3, 7, 10, 14].
+
+Định dạng đầu vào: Đầu vào của chương trình sẽ được chứa trong 1 file có phần mở rộng là .txt. Dòng đầu tiên chứa một số nguyên n sẽ biểu thị kích thước của mãng. Dòng tiếp theo chứa các số nguyên là phần tử của mãng được phân tách với nhau bằng dấu cách.
+
+Các ràng buộc:
+
+\begin{itemize}
+\item[-] 1 <= n <= 1000
+\item[-] 1 <= arr$_{i}$  <= 1000, trong đó arr$-{i}$ là phần tử thứ i$^{th}$ của mãng.
+\end{itemize}
+
+Định dạng đầu ra: Kết quả sau khi được xử lý sẽ là một mãng đã được sắp xếp theo thứ tự tăng dần và mãng đó được ghi vào trong file output có phần mở rộng là .txt.
+
+Input mẫu:
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/inputsample.png}
+\end{center}
+\end{figure}
+
+Output mẫu:
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/outputsample.png}
+\end{center}
+\end{figure}
+
+Function prototype mẫu:
+
+\begin{lstlisting}[language=c]
+void sapXep(int a[100], int n);
+
+int main() {
+    int arr[100], n;
+    FILE *inp, *out;
+
+    if ((inp = fopen("./datatest/test.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);         
+    }
+    fscanf(inp,"%d", &n);
+
+    for(int i = 0; i < n; i++) {
+        fscanf(inp,"%d", &arr[i]);
+    }
+    fclose(inp);
+
+    sapXep(arr,n);
+
+    if ((out = fopen("out.txt", "w")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);         
+    }
+
+    for(int j = 0; j < n; j++) {
+        fprintf(out,"%d ",arr[j]);
+    }
+    fclose(out);
+}
+\end{lstlisting}
+
+Như đoạn code phía trên, sinh viên chỉ cần đọc hiểu yêu cầu đề bài và hoàn thành hàm sapXep() ở phía trên mà không cần quan tâm phía trong hàm main làm gì. Chương trình đã tự động gọi hàm sapXep và ghi lại kết quả của hàm sapXep() ra file output.
+
+\subsection{Cách chấm điểm}
+Sau khi đã thực thi chương trình chấm điểm chúng ta sẽ thu được kết quả là số bộ testcase cho ra kết quả chính xác và số bộ testcase cho ra kết quả không chính xác theo bài tập lập trình của sinh viên. Dựa vào kết quả thu được ta sẽ tính ra được số điểm của sinh viên theo công thức sau:
+
+Số điểm =$\frac{ 10 }{ Tong so bo testcase }$ * So bo testcase dung
+
+Ví dụ: Chương trình có 10 bộ testcase, sau khi thực thi kết thúc và thu được 7 bộ testcase cho kết quả chính xác thì số điểm của sinh viên là (10 / 10) * 7 = 7 điểm.
+
+\section{Thực nghiệm}
+
+\subsection{Bài tập với đầu vào là các kiểu dữ liệu nguyên thủy}
+
+Đề bài: Cho 3 số nguyên ngẫu nhiên. Tìm số có giá trị lớn nhất trong 3 số.
+
+Ví dụ: Nếu cho a = 5, b = 5, c = 3, sau khi thực thi xong sẽ cho ra giá trị lớn nhất là 5.
+
+Trước khi đi vào chạy thực nghiệm, chúng ta sẽ đi qua tìm hiểu về cách tổ chức thư mục chứa các file dùng để thực thi khi tiến hành thực nghiệm.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucfolder.png}
+\end{center}
+\end{figure}
+
+Như hình bên trên trong thư mục demo sẽ chưa toàn bộ các file và thư mục cần thiết để thực thi chương trình. Trong thư mục demo có 2 file là test.txt và testcase.txt. File testcase.txt se chứa thông tin tổng số bộ test cần thực hiện và các bộ test cần thực hiện. Và cứ mỗi lần thực hiện kiểm tra bộ test chương trình sẽ tiến hành ghi bộ từng bộ test ra file test.txt.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/testcase.png}
+\end{center}
+\end{figure}
+
+Như hình bên dưới thì dòng đầu tiên sẽ biểu hiện tổng số bộ testcase. Các dòng tiếp theo sẽ là các bộ testcase. Ở trong file này cứ 3 dòng liên tiếp sẽ ứng với 1 bộ testcase để ứng với 3 input đầu vào của để bài trên. Với mỗi lần thực hiện chương trình sẽ đọc thông tin ở 3 dòng liên tiếp (trừ dòng đầu tiên) để ghi sang file test.txt là input cho mỗi lần chạy chương trình.
+
+Tiếp theo là file solution.c, file này chứa code bài giải của đề bài ở trên, thông thường code trong file này là do giáo viên (hoặc người ra đề) tạo ra. File này sẽ tiến hành đọc dữ liệu từ file test.txt để lấy làm input đầu vào và tiến hành thực thi. Sau khi thực thi thành công sẽ cho ra 1 file output là out.txt chứa kết quả trả về sau khi thực thi của chương trình.
+
+Tương tự như file solution.c là file sv.c, file này cũng chứa code bài giải của đề bài ở trên. Nhưng khác với solution.c file sv.c là do sinh viên làm và nộp lại. File này cũng tiến hành đọc dữ liệu từ file test.txt để lấy làm input đầu vào và tiến hành thực thi. Sau khi thực thi thành công sẽ cho ra 1 file output là outsv.txt chứa kết quả trả về sau khi thực thi của chương trình.
+
+Cuối cùng là file run.c, file này là file chính để tiến hành chấm điểm cho bài tập lập trình của sinh viên. Đầu tiên chương trình sẽ tiến hành đọc dữ liệu từ file testcase.txt để có được số lượng tổng bộ testcase cần thực hiện. Sau khi có được tổng số bộ testcase chương trình sẽ tiếp hành việc chấm điểm bài tập lập trình của sinh viên bằng cách so sánh kết quả của 2 file solution.c và sv.c. Dựa trên tổng số bộ testcase mà chương trình sẽ lặp với số lần tương ứng, mỗi lần lặp như vậy chương trình sẽ đọc 1 bộ testcase từ file testcase.txt để ghi ra file test.txt. Sau khi bộ test đã được ghi ra file test.txt, 2 file solution.c và sv.c sẽ tiến hành đọc bộ test được ghi trong file test.txt để thực hiện và cho ra output là 2 file out.txt và outsv.txt. Sau khi có được 2 file output chương trình sẽ tiến hành kiểm tra kết quả trong 2 file output có giống nhau hay không. Sau khi kết thúc vòng lặp chúng ta sẽ thu được số bộ test đúng và số bộ test không đúng. Dựa vào kết quả thu được chương trình sẽ tính được điểm của sinh viên (cách tính điểm tôi đã có đề cập trong phần "Cách chấm điểm" ở trên.
+
+Trường hợp đầu tiên tôi sẽ tiến hành chấm điểm có bài tập của sinh viên chưa đúng trong một số bộ testcase. Cùng xem qua cách giải quyết của sinh viên sau:
+
+\begin{lstlisting}
+int max(int a, int b, int c)
+{
+  if(a > b && a >c){   
+    return a;
+  } else if(b >a && b >c){
+    return b;
+  } else {
+    return c;
+  }
+}
+\end{lstlisting}
+
+Cùng xem qua đoạn mã thực hiện chấm điểm sau:
+
+\begin{lstlisting}
+int main ()
+{
+   FILE *inp,*out;
+   int n,a,b,c, wrong, success;
+   float diem;
+   success = 0;
+   wrong = 0;
+   if ((inp = fopen("./datatest/testcase.txt", "r")) == NULL)
+   {
+      printf("Error! opening file");
+      exit(1);         
+   }
+   fscanf(inp,"%d",&n);
+   for(int i = 0; i < n; i++) {
+      if((out = fopen("./datatest/test.txt", "w")) == NULL)
+      {
+         printf("Error! opening file");
+         exit(1);         
+      }
+      printf("Test lan thu %d\n", i + 1);
+      fscanf(inp,"%d",&a);
+      fscanf(inp,"%d",&b);
+      fscanf(inp,"%d",&c);
+      fprintf(out,"%d\n",a);
+      fprintf(out,"%d\n",b);
+      fprintf(out,"%d\n",c);
+      fclose(out);
+      char commandSolution[50],commandRunSolution[50],commandSV[50];
+      char ,commandRunSV[50],commandCompare[50];
+
+      strcpy(commandSolution, "gcc -Wall -o solution solution.c" );
+      strcpy(commandSV, "gcc -Wall -o sv sv.c" );
+      strcpy(commandRunSolution, "./solution");
+      strcpy(commandRunSV, "./sv");
+      strcpy(commandCompare, "diff ./out.txt ./outsv.txt");
+      system(commandSolution);
+      system(commandSV);
+      system(commandRunSolution);
+      system(commandRunSV);
+
+      if(system(commandCompare) == 0) {
+         printf("succcessful\n");
+         success = success + 1;
+      }else {
+         //diem = diem - 1.5;
+         wrong = wrong + 1;
+         printf("wrong\n");
+         printf("Bo test case: a = %d, b = %d, c = %d\n", a,b,c);
+      }
+   }
+   fclose(inp);
+   diem = (10.0 / n) * success;
+   printf("So bo testcase sai: %d\n", wrong);
+   printf("Diem cua ban la: %.2f\n", diem);
+   return(0);
+}
+\end{lstlisting}
+
+Trong đoạn code trên tôi sử dụng hàm fopen() để đọc ghi file, tham số đầu tiền sẽ là đường dẫn đích đến file cần đọc/ghi, tham số thứ dùng để truy cập đến chế độ cần sử dụng (đọc hoặc ghi file,...).
+
+Ví dụ: hàm fopen("./datatest/testcase.txt", "r") sẽ tiến hành truy cập vào file testcase.txt để đọc dữ liệu.
+
+Sau khi dọc dữ liệu từ testcase.txt và ghi dữ liệu vào file test.txt chương trình sẽ thực thi các câu lệnh hệ thống để biên dịch các file có phần mở rộng là .c. Sau khi đã biên dịch xong sẽ sử dụng file output của quá trình biên dịch để chạy chương trình. Như ở trên thì tôi sử dụng hàm system() để có thể thực thi các lệnh hệ thống trong C.
+
+Khi chạy xong các file biên dịch, chương trình sẽ cho ra 2 file output kết quả. Để biết là bài tập sinh viên có chạy đụng với bộ tetscase tương ứng hay không tôi sử dụng lệnh diff để kiểm tra sự khác biệt của 2 file output.
+
+Sau khi đã tiến hành kiểm tra hết tất cả bộ testcase, chương tình sẽ tính  được điểm của sinh viên dựa trên số bộ testcase đúng và số bộ testcase không đúng.
+
+Cùng xem qua quá trình chạy thực nghiệm đối với đề bài ở trên:
+
+Đầu tiên tôi tiến hành biên dịch file run.c trước khi chạy.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/compilerdemo.png}
+\end{center}
+\end{figure}
+
+Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucsaucompiler.png}
+\end{center}
+\end{figure}
+
+Để có thể chạy chương tình chúng ta tiến hành chạy file run vừa được tạo ra.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/rundemo.png}
+\end{center}
+\end{figure}
+
+Kết quả khi chạy file run để chấm điểm.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/ketquademo.png}
+\end{center}
+\end{figure}
+
+Như hình bên trên chúng ta thấy chương trình có tất cả 9 bộ test. Khi chạy đến bộ test thứ 9 thì bài của sinh viên cho ra kết  quả không đúng với bộ test đầu vào a = 16777216, b = 16777216, c = 0. Trong khi kết quả của solution cho ra là 16777216 thì bài của sinh viên lại cho ra kết quả là 0. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ test không đúng của sinh viên là 1 và điểm số của sinh viên là 8.89đ.
+
+Cùng xem lại thư mục sau khi chạy xong file run.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucsauchayrun.png}
+\end{center}
+\end{figure}
+
+Trong quá trình chạy chưởng trình sẽ sinh ra 2 file solution và sv sau quá trình compiler. Sau khi chạy 2 file sotution và sv sẽ sinh ra 2 file output là out.txt và outsv.txt.
+
+Tiếp theo chúng ta cũng xem qua một trường hợp mà bài tập của sinh viên chạy đúng hết tất cả các bộ testcase của chương trình. Cùng xem qua cách giải quyết của sinh viên này.
+
+\begin{lstlisting}
+int max(int a, int b, int c) 
+{ 
+  if (a>=b) {
+    if (a>=c){
+      return a;
+    } else {
+      return c;
+    } 
+  } else {
+    if (b>=c) {
+      return b;
+    } else {
+      return c;  
+    }
+  }
+}
+\end{lstlisting}
+
+Cũng giống như trường hợp ở trên, đầu tiên tôi sẽ biên dịch file run.c bằng câu lệnh gcc -Wall -o run run.c để có được file biên dịch run. Sau đó để chạy được chưởng trình chúng ta tiến hành chạy file run được sinh ra. Sau đó chúng ta nhận được kết quả như sau.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/ketquademodung.png}
+\end{center}
+\end{figure}
+
+Trong lần chấm điểm này bài tập của sinh viên đã đúng hết tất cả các bộ testcase của chương trình. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ test không đúng của sinh viên là 0 và điểm số của sinh viên là 10.00đ.
+
 \end{document}
 
 
