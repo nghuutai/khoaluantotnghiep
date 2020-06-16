@@ -928,7 +928,7 @@ int max(int a, int b, int c)
 }
 \end{lstlisting}
 
-Cũng giống như trường hợp ở trên, đầu tiên tôi sẽ biên dịch file run.c bằng câu lệnh gcc -Wall -o run run.c để có được file biên dịch run. Sau đó để chạy được chưởng trình chúng ta tiến hành chạy file run được sinh ra. Sau đó chúng ta nhận được kết quả như sau.
+Cũng giống như trường hợp ở trên, đầu tiên tôi sẽ biên dịch file run.c bằng câu lệnh gcc -Wall -o run run.c để có được file biên dịch run. Sau đó để chạy được chương trình chúng ta tiến hành chạy file run được sinh ra. Sau đó chúng ta nhận được kết quả như sau.
 
 \begin{figure}[ht]
 \begin{center}
@@ -937,6 +937,250 @@ Cũng giống như trường hợp ở trên, đầu tiên tôi sẽ biên dịc
 \end{figure}
 
 Trong lần chấm điểm này bài tập của sinh viên đã đúng hết tất cả các bộ testcase của chương trình. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ test không đúng của sinh viên là 0 và điểm số của sinh viên là 10.00đ.
+
+\subsection{Bài tập với đầu vào là một mãng số nguyên có n phần tử}
+
+Đề bài: Cho một mãng số nguyên có n phần tử. Sắp xếp mãng số nguyên đó theo thứ tự tăng dần.
+
+Ví dụ: Nếu cho một mãng sau arr = [3, 1, 7, 10, 2, 14], sau khi được sắp xếp mãng số nguyên đó sẽ trở thành arr = [1, 2, 3, 7, 10, 14].
+
+Trước khi đi vào chạy thực nghiệm, chúng ta sẽ đi qua tìm hiểu về cách tổ chức thư mục chứa các file dùng để thực thi khi tiến hành thực nghiệm.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucdemoarray.png}
+\end{center}
+\end{figure}
+
+Tương tự như cấu trúc của bài tập ở phần trên, bên trong thư mục demoarray sẽ có 1 thư mục datatest chứa thông tin của các bộ testcase, file solution.c để chứa code bài giải cho đề bài ở trên, file sv.c chứa code bài làm của sinh viên sau khi nộp bài và file run.c là file dùng để chạy chương trình chấm điểm cho bài tập của sinh viên.
+
+Trong thư mục datatest sẽ có 2 file test.txt và testcase.txt. Cũng như ở bài trên file testcase.txt sẽ chứa thông tin tổng số bộ test cần thực hiện và các bộ test cần thực hiện. Và mỗi lần kiểm tra bộ test, chương trình sẽ tiến hành ghi từng bộ test ra file test.txt.
+
+Như hình bên dứoi thì dòng đầu tiên sẽ biểu hiện tổng số bộ testcase. Các dòng tiếp theo sẽ là các bộ testcase. Ở trong file này cứ 2 dòng liên tiếp sẽ ứng với 1 bộ testcase với dòng đầu tiên ứng với số phần tử của mảng và dóng tiếp theo là các phần tử của mãng (các phần tử trong mãng được phân cách với nhau bằng dấu cách. Với mỗi lần thực hiện chương trình sẽ đọc thông tin ở 3 dòng liên tiếp (trừ dòng đầu tiên) để ghi sang file test.txt là cho mỗi lần chạy chương trình.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/testcasearray.png}
+\end{center}
+\end{figure}
+
+Để chạy thực nghiệm đôi với bài toán trên, tôi sẽ tiến hành chạy thử ở hai trường hợp đó là một bài của sinh viên làm đúng và một bài của sinh viên làm chưa chính xác.
+
+Đầu tiên tỗi sẽ tiến hành chạy thử trường hợp chưa chính xác. Cùng xem qua cách giải quyết sau của sinh viên:
+
+\begin{lstlisting}
+void sapXep(int a[100], int n){
+    int tg;
+    for(int i = 0; i < n - 1; i++){
+        for(int j = i + 1; j < n; j++){
+            if(a[i] > a[j] + 6){
+                tg = a[i];
+                a[i] = a[j];
+                a[j] = tg;        
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+Trong bài tập này trước khi tiến hành đọc dữ liệu từ file chưa testcase để chấm điểm, chương trình sẽ chạy trước hàm setup() để sinh test ngẫu nhiên (với testcase là các mãng số nguyên với số phần tử ngẫu nhiên).
+
+\begin{lstlisting}
+void printRandoms(int lower, int upper, int count, FILE *out) 
+{ 
+    int i;
+    fprintf(out,"%d\n",count);
+    for (i = 0; i < count; i++) { 
+        int num = (rand() % 
+           (upper - lower + 1)) + lower; 
+        fprintf(out,"%d ",num); 
+    }
+    fprintf(out,"\n"); 
+} 
+
+int randomNumber(int lower, int upper)
+{
+    int num = (rand() % (upper - lower + 1)) + lower; 
+    return num;
+}
+
+void setup(int lower, int upper, int n, FILE *out)
+{
+    int count;
+    fprintf(out,"%d\n",n);
+    srand(time(0)); 
+    for(int i = 0; i < n; i++)
+    {
+        count = randomNumber(0, 10);
+        printRandoms(lower, upper, count, out);
+    } 
+    fclose(out);
+}
+\end{lstlisting}
+
+Trong hàm setup() tham số n dùng để quy định số bộ testcase ta muốn tạo trước khi chạy chương trình. Tham số lower và upper dùng để quy định giá trị các phần tử trong mảng sẽ có giá trị trong khoảng đó (các phần tử sẽ lớn hơn hoặc bằng lower và nhỏ hơn hoặc bằng upper). Tham số out dùng để ghi các thông tin vào file, cụ thể ở đây là ghi số lượng bộ testcase và các bộ test case được tạo ra. Bên trong hàm setup() tôi sử dụng hàm randomNumber() để sinh ngẫu nhiên số lượng phần tử của mãng và hàm printRandoms() dùng để sinh các mãng số nguyên và ghi vào trong file.
+
+Cùng xem qua đoạn mã thực hiện chấm điểm sau:
+
+\begin{lstlisting}
+int main ()
+{
+    FILE *inp, *out, *outTestcase;
+    int n, arr[100] , m, lower = 1, upper= 100, wrong, success;
+    float diem;
+    success = 0;
+    wrong = 0;
+
+    if((outTestcase = fopen("./datatest/testcase.txt", "w")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);         
+    }
+    setup(lower,upper, 10,outTestcase);
+    if ((inp = fopen("./datatest/testcase.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);         
+    }
+    fscanf(inp,"%d",&n);
+
+    for(int i = 0; i < n; i++) {
+        if((out = fopen("./datatest/test.txt", "w")) == NULL)
+        {
+            printf("Error! opening file");
+            exit(1);         
+        }
+        printf("Test lan thu %d\n", i + 1);
+
+        fscanf(inp,"%d",&m);
+       
+        for(int i = 0; i < m; i++) {
+            fscanf(inp,"%d", &arr[i]);
+        }
+
+        fprintf(out,"%d\n",m);
+        for(int i = 0; i < m; i++) {
+            fprintf(out,"%d ",arr[i]);
+        }
+        fclose(out);
+
+        char commandSolution[50],commandRunSolution[50],commandSV[50],commandRunSV[50],commandCompare[50];
+
+        strcpy(commandSolution, "gcc -Wall -o solution solution.c" );
+        strcpy(commandSV, "gcc -Wall -o sv sv.c" );
+        strcpy(commandRunSolution, "./solution");
+        strcpy(commandRunSV, "./sv");
+        strcpy(commandCompare, "diff ./out.txt ./outsv.txt");
+        system(commandSolution);
+        system(commandSV);
+        system(commandRunSolution);
+        system(commandRunSV);
+
+        if(system(commandCompare) == 0) {
+            printf("succcessful\n");
+            success = success + 1;
+        }else {
+            wrong = wrong + 1;
+            printf("wrong\n");
+            printf("Bo test case: ");
+            for(int i = 0; i < m; i++) {
+                printf("%3d", arr[i]);
+            }
+            printf("\n");
+        }
+    }
+    fclose(inp);
+    diem = (10.0 / n) * success;
+    printf("So bo testcase sai: %d\n", wrong);
+    printf("Diem cua ban la: %.2f\n", diem);
+    return(0);
+}
+\end{lstlisting}
+
+Như ở trên tôi tiến hành gọi hàm setup() để tạo trước các bộ testcase được ghi vào trong file testcase.txt.
+
+Trong đoạn code trên tôi sử dụng hàm fopen() để đọc ghi file, tham số đầu tiền sẽ là đườngdẫn đích đến file cần đọc/ghi, tham số thứ dùng để truy cập đến chế độ cần sử dụng (đọc hoặcghi file,...).
+
+Ví dụ: hàm fopen("./datatest/testcase.txt", "r") sẽ tiến hành truy cập vào file testcase.txtđể đọc dữ liệu.
+
+Sau khi dọc dữ liệu từ testcase.txt và ghi dữ liệu vào file test.txt chương trình sẽ thực thicác câu lệnh hệ thống để biên dịch các file có phần mở rộng là .c. Sau khi đã biên dịch xong sẽsử dụng file output của quá trình biên dịch để chạy chương trình. Như ở trên thì tôi sử dụnghàm system() để có thể thực thi các lệnh hệ thống trong C.
+
+Khi chạy xong các file biên dịch, chương trình sẽ cho ra 2 file output kết quả. Để biết là bàitập sinh viên có chạy đụng với bộ tetscase tương ứng hay không tôi sử dụng lệnh diff để kiểmtra sự khác biệt của 2 file output.
+
+Sau khi đã tiến hành kiểm tra hết tất cả bộ testcase, chương tình sẽ tính được điểm của sinh viên dựa trên số bộ testcase đúng và số bộ testcase không đúng.
+
+Cùng xem qua quá trình chạy thực nghiệm đối với đề bài ở trên:
+
+Cũng như ở phần trên tôi sẽ tiến hành biên dịch file run.c trước khi chạy.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/compilerdemoarray.png}
+\end{center}
+\end{figure}
+
+Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucarraysaucompiler.png}
+\end{center}
+\end{figure}
+
+Để có thể chạy chương trình chúng ta tiến hành chạy file run vừa được tạo ra.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/rundemoarray.png}
+\end{center}
+\end{figure}
+
+Kết quả khi chạy file run để chấm điểm.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/ketquademoarray.png}
+\end{center}
+\end{figure}
+
+Như hình bên trên chúng ta thấy chương trình có tất cả 10 bộ test. Khi chạy thì chúng ta thấy được các bộ testcase ở lần thứ 3, 7, 9 sẽ thực hiện không chính xác. Ví dụ như ở bộ test thứ 3 với bộ testcase đầu vào là arr = [46, 9, 71, 28, 100, 42, 98] thì kết quả của solution cho ra là [9, 28, 42, 46, 71, 98, 100] còn của sinh viên cho ra kết quả là [9, 28, 46, 42, 71, 100, 98]. Như ta thấy được thì kết quả của solution cho ra là đúng như mong đợi còn kết quả của sinnh viên cho ra là chưa chính xác. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ testkhông đúng của sinh viên là 3 và điểm số của sinh viên là 7.00đ.
+
+Cùng xem lại thư mục sau khi chạy xong file run.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/cautrucsauchayrunarray.png}
+\end{center}
+\end{figure}
+
+Trong quá trình chạy chương trình sẽ sinh ra 2 file solution và sv sau quá trình compiler. Sau khi chaỵ 2 file soution và sv sẽ sinh ra 2 file output là out.txt và outsv.txt.
+
+Tiếp theo tôi sẽ tiến hành chạy trường hợp thứ 2 đó là trường hợp bài làm của sinh viên cho ra kết quả chính xác. Cùng xem qua cách giải quyết sau:
+
+\begin{lstlisting}
+void sapXep(int a[100], int n){
+    int tg;
+    for(int i = 0; i < n - 1; i++){
+        for(int j = i + 1; j < n; j++){
+            if(a[i] > a[j]){
+                tg = a[i];
+                a[i] = a[j];
+                a[j] = tg;        
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+Cũng giống như trường hợp đầu tiên, tôi sẽ biên dịch file run.c bằng câu lệnh gcc -Wall -o run run.c để có được file biên dịch run. Sau đó để chạy được chương trình chúng ta tiến hành chạy file run được sinh ra. Sau đó chúng ta nhận được kết quả như sau.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=.3]{hinhanh/ketquademoarraydung.png}
+\end{center}
+\end{figure}
+
+Trong lần chấm điểm này bài tập của sinh viên đã đúng hết tất cả các bộ testcase của chương trình. Sau khi chạy hết tất các các bộ tetscase chương trình sẽ thông báo số bộ testcase không đúng của sinh viên là 0 và điểm số của sinh viên là 10.00đ.
 
 \end{document}
 
