@@ -11,20 +11,24 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{scrextend}
+\usepackage{framed}
+\usepackage{multicol}
 \changefontsizes{13pt}
 \begin{document}
+\tableofcontents \newpage
+
 \section{Vấn đề về đánh giá tự động cho bài tập lập trình}
+
 \subsection{Giới thiệu}
-Trong thời kỳ ngày càng phát triển của mạng internet thì việc chấm điểm tự động cho các bài tập lập trình ngày càng trở nên quan trọng hơn đặc biệt là khi có sự xuất hiện của các khóa học trực tuyến ngày càng phổ biến hoặc là các lớp học có sinh viên tham gia với số lượng lớn. Đánh giá là một phần không thể thiếu trong giáo dục và thường được sử dụng để đánh giá và cung cấp kết quả cho sinh viên tham gia vào môn học. Đồng thời dựa vào các kết quả đánh giá sau môn học của sinh viên mà giáo viên có thể xác định liệu chương trình giảng dạy có đáp ứng được nhu cầu cần thiết của sinh viên hay không.
+Trong thời kỳ ngày càng phát triển của mạng internet thì việc chấm điểm tự động cho các bài tập lập trình ngày càng trở nên quan trọng hơn, đặc biệt là khi có sự xuất hiện của các khóa học trực tuyến ngày càng phổ biến hoặc là các lớp học có sinh viên tham gia với số lượng lớn. Đánh giá là một phần không thể thiếu trong giáo dục và thường được sử dụng để đánh giá và cung cấp kết quả cho sinh viên tham gia vào môn học. Đồng thời dựa vào các kết quả đánh giá sau môn học của sinh viên mà giáo viên có thể xác định liệu chương trình giảng dạy có đáp ứng được nhu cầu cần thiết của sinh viên hay không.
 
 \indent Trong lĩnh vực giáo dục tâm lý, người ta đã chứng minh rằng hầu hết sinh viên thường hướng những nỗ lực của họ dựa trên kết quả của các bài kiểm tra sau khi được đánh giá và ảnh hưởng của các kết quả đó đến kết quả cuối cùng của khóa học. Đánh giá liên tục trong một khóa học lập trình đảm bảo rằng sinh viên hoàn thành đủ các bài kiểm tra cũng như nhận lại phản hồi về kết quả của các bài kiểm tra đó. Tuy nhiên việc đánh giá kết quả một cách thủ công cho một lớp học đòi hỏi rất nhiều công sức và rất dễ bị lỗi và việc đấy càng được thể hiện rõ ràng khi số lượng sinh viên trong một lớp học tăng lên (Ví dụ, các khóa học lập trình khác nhau trên edX plat-form có hơn 150000 sinh viên đăng ký trên toàn thế giới \cite{liu2019automatic}), điều đó làm cho việc chấm điểm nhanh chóng cho tất cả các bài tập của sinh viên trở nên khó khăn hơn nhiều. Nhiều khóa học trực tuyến áp dụng phản hồi ngang hàng \cite{weld2012personalized}, nhưng loại phản hồi này không đáp ứng được như mong muốn. Sinh viên phải chờ hàng giờ để nhận được phản hồi và giáo viên hướng dẫn chỉ có kiến thức hạn chế về các quy trình đánh giá ngang hàng không có cấu trúc này. Lúc đó việc đánh giá kết quả của sinh viên đòi hỏi phải được giới hạn hoặc hợp lý hóa theo một cách nào đó.
 
-\indent Trong thực tế hai giáo viên chấm cùng một môn rất hiếm khi áp dụng cùng một tiêu chí đánh giá trong mọi trường hợp. Điều này là không công bằng với sinh viên bởi vì điều đó có nghĩa là điểm đánh giá của học sinh có thể phụ thuộc vào từng giải pháp đánh giá của giáo viên mà không chỉ dựa vào giải pháp của học sinh. Và việc này càng xảy ra phổ biến trong việc đánh giá các bài tập lập trình.
+\indent Trong thực tế hai giáo viên chấm cùng một môn rất hiếm khi áp dụng cùng một tiêu chí đánh giá trong mọi trường hợp. Điều này là không công bằng với học sinh/sinh viên bởi vì điều đó có nghĩa là điểm đánh giá của học sinh/sinh viên có thể phụ thuộc vào từng giải pháp đánh giá của giáo viên mà không chỉ dựa vào giải pháp của học sinh/sinh viên. Và việc này càng xảy ra phổ biến trong việc đánh giá các bài tập lập trình.
 
-\indent Thông thường sẽ có vô số giải pháp khả thi cho cùng một vấn đề vì có thể có thể có các biến thể trong các bài tập lập trình do đó một mẫu đánh giá sẽ cũng cấp hướng dẫn cho người đánh giá nhưng sẽ không bao quát hết tất các cả trường hợp. Điều đó đòi hỏi phải có một công cụ giúp đánh giá các bài kiểm tra một cách tự động và hơn hết là đảm bảo đánh giá một cách công bằng, khách quan và được áp dụng như nhau cho tất cả học sinh. Thách thức này đã dẫn đến sự phát triển của các công cụ chấm điểm tự động.
+\indent Thông thường sẽ có vô số giải pháp khả thi cho cùng một vấn đề vì có thể có các biến thể trong các bài tập lập trình do đó một mẫu đánh giá sẽ cung cấp hướng dẫn cho người đánh giá nhưng sẽ không bao quát hết tất các cả trường hợp. Điều đó đòi hỏi phải có một công cụ giúp đánh giá các bài kiểm tra một cách tự động và hơn hết là đảm bảo đánh giá một cách công bằng, khách quan và được áp dụng như nhau cho tất cả học sinh. Thách thức này đã dẫn đến sự phát triển của các công cụ chấm điểm tự động.
 
-\indent Hiện nay đã có nhiều hệ thống đánh giá tự động tồn tại nhưng hàng năm vẫn có rất nhiều hệ thống đánh giá khác được tạo ra. Các hệ thống đã tồn tại đều đã đáp ứng hầu hết các nhu cầu về đánh giá.
-Một lý do rõ ràng cho sự đa dạng của các công cự đó là tuổi thọ và tính khả dụng của nó. Các công cụ đánh giá được tạo ra như là một phần của các khóa học. Nó giúp cho việc đánh giá kết quả của toàn bộ học viên trong khóa học một cách nhanh chóng nhưng không phù hợp để phân phối rộng rãi cho các khóa học khác. Thông thường các công cụ được các giảng viên sử dụng để hỗ trợ trong việc đánh giá các bài tập lập trình vì vậy rất ít các công cụ xuất hiện dưới dạng phần mềm được hỗ trợ và sử dụng rộng rãi. Vì vậy các các công cụ đánh giá tự động thường được lặp đi lặp lại rất nhiều đồng thời có rất ít các công cụ đánh giá tự động được sử dụng một cách rộng rãi và phổ biến.
+\indent Hiện nay đã có nhiều hệ thống đánh giá tự động tồn tại nhưng hàng năm vẫn có rất nhiều hệ thống đánh giá khác được tạo ra. Các hệ thống đã tồn tại đều đã đáp ứng hầu hết các nhu cầu về đánh giá. Một lý do rõ ràng cho sự đa dạng của các công cụ đó là tuổi thọ và tính khả dụng của nó. Các công cụ đánh giá được tạo ra như là một phần của các khóa học. Nó giúp cho việc đánh giá kết quả của toàn bộ học viên trong khóa học một cách nhanh chóng nhưng không phù hợp để phân phối rộng rãi cho các khóa học khác. Thông thường các công cụ được các giảng viên sử dụng để hỗ trợ trong việc đánh giá các bài tập lập trình vì vậy rất ít các công cụ xuất hiện dưới dạng phần mềm được hỗ trợ và sử dụng rộng rãi. Vì vậy các các công cụ đánh giá tự động thường được lặp đi lặp lại rất nhiều đồng thời có rất ít các công cụ đánh giá tự động được sử dụng một cách rộng rãi và phổ biến.
 
 \indent  Trong bài báo cáo này sẽ trình bày và so sánh các công cụ được sử dụng để chấm điểm tự động cho các bài tập lập trình.
 
@@ -43,7 +47,7 @@ Việc áp dụng các hệ thống tự động đánh giá vào trong các kh�
 \item[-] \textbf{Tốc độ}: Giúp cho việc đánh giá nhanh hơn nhiều và sinh viên sẽ nhận được kết quả ngay sau kỳ thi. Khi sử dụng đánh giá thủ công thì sinh viên cần chờ một khoảng thời gian rất lâu để nhận được kết quả đánh giá của bài kiểm tra. Ngược lại với hệ thống đánh giá tự động, các sinh viên có thể tự đánh giá bài kiểm tra của mình, biết điểm của họ và sửa lỗi của chính họ.
 \item[-] \textbf{Công bằng}: Các lỗi tương tự sẽ được đánh giá như nhau và giáo viên sẽ không ảnh hưởng đến việc chấm điểm.
 \item[-] \textbf{Độc lập}: Việc đánh giá một bài kiểm tra không bị ảnh hưởng từ kết quả của các bài kiểm tra trước đó. Trong đánh giá thủ công, một bài kiểm tra lúc trước có kết quả không tốt có thể khiến giáo viên chủ quan coi bài kiểm tra tiếp theo là không tốt.
-\end{itemize}
+\end{itemize} \newpage
 
 \section{Kỹ thuật sử dụng trong các hệ thống đánh giá tự động và các công cụ}
 Hiện nay có rất nhiều hệ thống đánh giá tự động đang tồn tại nhưng để đảm bảo rằng các hệ thống đó đem lại kết quả đánh giá một cách chính xác là một điều khó khăn. Một trong những vấn đề quan trọng ảnh hưởng đến kết quả đánh giá của một hệ thống đó là việc xây dựng các bộ kiểm thử có chất lượng cao. Trên thực tế, việc cung cấp các bộ kiểm thử bằng cách thủ công là một quá trình rất chậm và tốn thời gian, điều này dẫn đến việc tạo ra các bộ kiểm thử không hiệu quả và không đầy đủ. Điều này dẫn đến chất lượng của hệ thống đánh giá bị ảnh hưởng.
@@ -60,13 +64,13 @@ Trong hoạt động kiểm thử phần mềm, các ca kiểm thử thường �
 tượng trưng cho các giá trị đầu vào.
 
 \subsubsection{Tổng quan về kỹ thuật Symbolic execution}
-Ý tưởng chính của Symbolic execution là thực thi chương trình với các giá trị tượng trưng (Symbolic value) thay vì các giá trị cụ thể (concrete value) của các tham số đầu vào. Kết quả là giá trị đầu ra được tính toán bởi chương trình và được biểu diễn bởi bởi một biểu thức tượng trưng. Trong kiểm thử phần mềm, kỹ thuật Symbolic execution được sử dụng để sinh dữ liệu kiểm thử cho mỗi đường thực thi khác nhau của chương trình. Ví dụ trong hình \ref{refhinh1} (trang \pageref{refhinh1}) minh họa cho Symbolic execution.
+Ý tưởng chính của Symbolic execution là thực thi chương trình với các giá trị tượng trưng (Symbolic value) thay vì các giá trị cụ thể (concrete value) của các tham số đầu vào. Kết quả là giá trị đầu ra được tính toán bởi chương trình và được biểu diễn bởi một biểu thức tượng trưng. Trong kiểm thử phần mềm, kỹ thuật Symbolic execution được sử dụng để sinh dữ liệu kiểm thử cho mỗi đường thực thi khác nhau của chương trình. Ví dụ trong hình \ref{refhinh1} (trang \pageref{refhinh1}) minh họa cho Symbolic execution.
 
-\indent Trong quá trình thực thi tượng trưng, việc đi theo một nhánh cụ thể nào đó không phụ thuộc vào các giá trị của các tham số đầu vào. Tại tất cả các điểm rẽ nhánh, tất cả các nhánh sẽ được xem xét và kiểm tra nhằm định hướng cho thực thi tiếp theo của chương trình. Với những chương trình ở dạng đơn giản có hại loại thực thi chủ yếu: đó là câu lệnh gán và câu lệnh rẽ nhánh. Tại các câu lệnh gán, giá trị tượng trưng của biến chương trình cũng như các tham số đầu vào có liên quan đến câu lệnh đó được tính toán và cập nhập lại, còn tại các điểm rẽ nhánh, chương trình sẽ điều khiển thực thi theo cả hai nhánh tương ứng đồng thời ràng buộc đường đi (Path condition) tương ứng với hai nhánh sẽ được tạo ra. Một ràng buộc là một biểu thức điều kiện tương ứng với giá trị true, ràng buộc kia tương ứng với giá trị false của biểu thức ràng buộc. Các ràng buộc này sẽ được cập nhập vào đường đi tương ứng với nhánh đó. Các ràng buộc này sẽ được xen xét bởi một bộ giải ràng buộc để đánh giá xem đường đi tiếp theo có khả thi không hay nói một cách khác là kiểm tra xem có tồn tại bộ giá trị thõa mãn ràng buộc này hay không. Nếu không thõa màn thì ràng buộc sẽ đánh giá là sai, khi đó Symbolic execution sẽ dừng hoặc quay lui thực thi theo nhánh khả thi.
+\indent Trong quá trình thực thi tượng trưng, việc đi theo một nhánh cụ thể nào đó không phụ thuộc vào các giá trị của các tham số đầu vào. Tại tất cả các điểm rẽ nhánh, tất cả các nhánh sẽ được xem xét và kiểm tra nhằm định hướng cho thực thi tiếp theo của chương trình. Với những chương trình ở dạng đơn giản có hai loại thực thi chủ yếu: đó là câu lệnh gán và câu lệnh rẽ nhánh. Tại các câu lệnh gán, giá trị tượng trưng của biến chương trình cũng như các tham số đầu vào có liên quan đến câu lệnh đó được tính toán và cập nhập lại, còn tại các điểm rẽ nhánh, chương trình sẽ điều khiển thực thi theo cả hai nhánh tương ứng đồng thời ràng buộc đường đi (Path condition) tương ứng với hai nhánh sẽ được tạo ra. Một ràng buộc là một biểu thức điều kiện tương ứng với giá trị true, ràng buộc kia tương ứng với giá trị false của biểu thức ràng buộc. Các ràng buộc này sẽ được cập nhập vào đường đi tương ứng với nhánh đó. Các ràng buộc này sẽ được xem xét bởi một bộ giải ràng buộc để đánh giá xem đường đi tiếp theo có khả thi không hay nói một cách khác là kiểm tra xem có tồn tại bộ giá trị thõa mãn ràng buộc này hay không. Nếu không thõa mãn thì ràng buộc sẽ đánh giá là sai, khi đó Symbolic execution sẽ dừng hoặc quay lui thực thi theo nhánh khả thi.
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics{hinhanh/hinh1}
+\includegraphics[scale=0.7]{hinhanh/hinh1}
 \end{center}
 \caption{Ví dụ cho symbolic execution}
 \label{refhinh1}
@@ -74,17 +78,17 @@ tượng trưng cho các giá trị đầu vào.
 
 \indent Các ràng buộc đường đi được tạo ra bằng cách thu gom các điều kiện trên đường đi tương ứng. Giải các ràng buộc này sẽ sinh ra các giá trị cụ thể cho các tham số đầu vào tương ứng với từng nhánh thực thi của chương trình.
 
-\indent Tất cả các đường thực thi của chương trình có thể biểu diễn bởi một cấu trúc cây gọi là cây thực thi (Tree execution). Hình \ref{refhinh2} (trang \pageref{refhinh2}) là cây thực thi tượng trưng cho hàm testme() trong hình \ref{refhinh1} (trang \pageref{refhinh1}). Các cạnh của cây biểu diễn cho sự chuyển đổi từ trạng thái này sang trạng thái khác. Với ví dụ trên phương thức testme() trong hình \ref{refhinh1} (trang \pageref{refhinh1}) sẽ có cây thực thi mô tả những đường thực thi của chương trình với các biến đầu vào là {x=0, y=1}, {x=2, y=1}, {x=30, y=15}, mục tiêu là sinh ra tập các ca kiểm thử thõa mãn thực thi cho tất cả các nhánh của chương trình phụ thuộc vào giá trị tượng trưng của các tham biến đầu vào nhiều nhất có thể trong một khoảng thời gian nhất định đảm báo khám phá chính xác tất cả các đường thực thi bởi một lần duy nhất với những giá trị đầu vào đã cho.
+\indent Tất cả các đường thực thi của chương trình có thể biểu diễn bởi một cấu trúc cây gọi là cây thực thi (Tree execution). Hình \ref{refhinh2} (trang \pageref{refhinh2}) là cây thực thi tượng trưng cho hàm testme() trong hình \ref{refhinh1} (trang \pageref{refhinh1}). Các cạnh của cây biểu diễn cho sự chuyển đổi từ trạng thái này sang trạng thái khác. Với ví dụ trên phương thức testme() trong hình \ref{refhinh1} (trang \pageref{refhinh1}) sẽ có cây thực thi mô tả những đường thực thi của chương trình với các biến đầu vào là {x=0, y=1}, {x=2, y=1}, {x=30, y=15}, mục tiêu là sinh ra tập các ca kiểm thử thõa mãn thực thi cho tất cả các nhánh của chương trình phụ thuộc vào giá trị tượng trưng của các tham biến đầu vào nhiều nhất có thể trong một khoảng thời gian nhất định đảm bảo khám phá chính xác tất cả các đường thực thi bởi một lần duy nhất với những giá trị đầu vào đã cho.
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics{hinhanh/hinh2}
+\includegraphics[scale=0.9]{hinhanh/hinh2}
 \end{center}
 \caption{Cây Symbolic execution tương ứng với hàm testme() trong ví dụ 1}
 \label{refhinh2}
 \end{figure}
 
-\indent Bắt đầu thực thi tượng trưng hàm testme() bằng việc gán giá trị cho các tham số đầu vào x và y lần lượt là $x_0$, $y_0$. Khởi tạo PC (Path condition) nhận giá trị là true, tới câu lệnh rẽ nhánh $if(2*y_0=x_0)$ hai nhanh của chương trình tương ứng đều được thực thi với các giá trị tương ứng là $x_0$ và $y_0$. Tại đây biểu thức điều kiện rẽ nhánh là $2*y_0=x_0$ và $!(2*y_0=x_0)$ được bổ sung và PC theo hai nhánh khác nhau. Sau khi thực thi câu lệnh $if(2*y_0=x_0)$ hàm testme() được thực thi theo nhánh mà tồn tại bộ giá trị x,y thõa mãn. Tương tự như trên, khi gặp câu lệnh $if(x_0>y_0+10)$ PC theo hai nhánh tương ứng sẽ được cập nhập bổ sung là $(2*y_0=x_0)$ \^{} $(x_0>y_0+10)$ và $(2*y_0=x_0)$\^{}$(x_0<y_0+10)$. Tại mỗi điểm rẽ nhánh PC sẽ được cập nhập và một thủ tục quyết định bằng bộ xử lý ràng buộc sẽ được sử dụng để xác định xem nhánh tương ứng với PC đó có khả thi hay không để điều hướng thực thi hiện thời đi theo nhánh đó. Nếu PC được đánh giá là không khả thi thực thi tượng trưng sẽ dừng hoặc quay lui, và thực thi tượng trưng chỉ thực thi chương trình tượng trưng theo nhánh mà PC được đánh giá là khả thi.
+\indent Bắt đầu thực thi tượng trưng hàm testme() bằng việc gán giá trị cho các tham số đầu vào x và y lần lượt là \textit{$x_0$}, \textit{$y_0$}. Khởi tạo PC (Path condition) nhận giá trị là true, tới câu lệnh rẽ nhánh \textit{$if(2*y_0=x_0)$} hai nhanh của chương trình tương ứng đều được thực thi với các giá trị tương ứng là \textit{$x_0$} và \textit{$y_0$}. Tại đây biểu thức điều kiện rẽ nhánh là \textit{$2*y_0=x_0$} và \textit{$!(2*y_0=x_0)$} được bổ sung và PC theo hai nhánh khác nhau. Sau khi thực thi câu lệnh \textit{$if(2*y_0=x_0)$} hàm testme() được thực thi theo nhánh mà tồn tại bộ giá trị x,y thõa mãn. Tương tự như trên, khi gặp câu lệnh \textit{$if(x_0>y_0+10)$} PC theo hai nhánh tương ứng sẽ được cập nhập bổ sung là \textit{$(2*y_0=x_0)$} \^ {}\textit{$(x_0>y_0+10)$} và \textit{$(2*y_0=x_0)$}\^{}\textit{$(x_0<y_0+10)$}. Tại mỗi điểm rẽ nhánh PC sẽ được cập nhập và một thủ tục quyết định bằng bộ xử lý ràng buộc sẽ được sử dụng để xác định xem nhánh tương ứng với PC đó có khả thi hay không để điều hướng thực thi hiện thời đi theo nhánh đó. Nếu PC được đánh giá là không khả thi thực thi tượng trưng sẽ dừng hoặc quay lui, và thực thi tượng trưng chỉ thực thi chương trình tượng trưng theo nhánh mà PC được đánh giá là khả thi.
 
 \indent Đối với những đoạn mã chứa vòng lặp hoặc lời gọi đệ quy mà đường thực thi là vô hạn và biến điều khiển của vòng lặp hoặc lời gọi đệ quy là tượng trưng. Ví dụ trong hình \ref{refhinh3} (trang \pageref{refhinh3}) sẽ là vô hạn đường thực thi với mỗi đường thực thi là 1 dãy tùy ý số lượng giá trị là true và sau cùng là false hoặc là một dãy vô hạn số lần lặp, khi đó PC của đường thực thị là một dãy gồm n giá trị true và sau cùng là false.
 
@@ -98,7 +102,7 @@ tượng trưng cho các giá trị đầu vào.
 
 \indent Trên thực tế cần phải thêm các tiêu chí giới hạn cho việc tìm kiếm như thời gian thực thi, giới hạn chiều sâu của đường thực thi hoặc số lượng các vòng lặp lồng nhau.
 
-\indent Nhược điểm chính của Symbolic execution truyền thống là không thể sinh dữ liệu test nếu không giải được biểu thức ràng buộc đường thực thi. Ví dụ nếu ta thay hàm twice() ở hình \ref{refhinh1} (trang \pageref{refhinh1}) bằng hàm twice() ở hình \ref{refhinh4} (trang \pageref{refhinh4}) sau khi thực hiện câu lệnh dòng 7 thì thực thi tượng trưng sẽ cho ra hai ràng buộc mới bổ sung $x_0$\#$y_0$*$y_0$\%50 và $x_0=y_0$*$y_0$\%$50$ và khi bộ giải ràng buộc không giải được ràng buộc trên thực thi tượng trưng sẽ thất bại trong việc sinh các dữ liệu kiểm thử cho chương trình sau khi đã được sửa đổi.
+\indent Nhược điểm chính của Symbolic execution truyền thống là không thể sinh dữ liệu test nếu không giải được biểu thức ràng buộc đường thực thi. Ví dụ nếu ta thay hàm twice() ở hình \ref{refhinh1} (trang \pageref{refhinh1}) bằng hàm twice() ở hình \ref{refhinh4} (trang \pageref{refhinh4}) sau khi thực hiện câu lệnh dòng 7 thì thực thi tượng trưng sẽ cho ra hai ràng buộc mới bổ sung \textit{$x_0$\#$y_0$*$y_0$\%50} và \textit{$x_0=y_0$*$y_0$\%$50$} và khi bộ giải ràng buộc không giải được ràng buộc trên thực thi tượng trưng sẽ thất bại trong việc sinh các dữ liệu kiểm thử cho chương trình sau khi đã được sửa đổi.
 
 \begin{figure}[ht]
 \begin{center}
@@ -110,7 +114,7 @@ tượng trưng cho các giá trị đầu vào.
 
 \subsubsection{Các kỹ thuật Symbolic execution hiện đại}
 
-Một trong những yếu tố quan trọng của kỹ thuật thực thi tượng trưng hiện đại là khả năng kết hợp giữa giá trị cụ thể và giá trị tượng trưng. Chúng tôi sẽ trình bày dưới đây hai kỹ thuât quan trọng và đánh giá những ưu điềm mà các kỹ thuật này cung cấp.
+Một trong những yếu tố quan trọng của kỹ thuật thực thi tượng trưng hiện đại là khả năng kết hợp giữa giá trị cụ thể và giá trị tượng trưng. Chúng tôi sẽ trình bày dưới đây hai kỹ thuât quan trọng và đánh giá những ưu điểm mà các kỹ thuật này cung cấp.
 
 \begin{enumerate}
 \item \textbf{Concolic testing}
@@ -121,7 +125,7 @@ Bắt đầu bằng việc chọn những giá trị tùy ý cho các tham số 
 
 Tại các câu lệnh rẽ nhánh, biểu thức điều kiện rẽ nhánh sẽ được đánh giá theo các giá trị cụ thể của các tham số đầu vào. Nếu biểu thức điều kiện rẽ nhánh nhận giá trị là True thì biểu thức của điều kiện rẽ nhánh sẽ được thu gom vào ràng buộc của PC và được ghi nhớ, đồng thời phủ định của điều kiện rẽ nhánh sẽ được sinh ra và được thêm vào một PC tương ứng với nhánh còn lại mà sự thực thi cụ thể đó không đi theo. Một bộ xử lý ràng buộc (Constraint Solver) sẽ được sử dụng để giải quyết các ràng buộc mới sinh ra này để sinh ra các giá trị cụ thể của tham số đầu vào. Trong trường hợp ngược lại biểu thức phủ định của điều kiện rẽ nhánh sẽ được thu gom vào ràng buộc của PC tương ứng với nhánh mà sự thực thi hiện thời đang đi theo và được ghi nhớ. Đồng thời điều kiện rẽ nhánh sẽ được sinh ra và thêm vào PC tương ứng với nhánh còn lại mà sự thực thi hiện thời không đi theo. Các giá trị mới được sinh ra của các tham số đầu vào sẽ tiếp tục được thực thi và quá trình này sẽ được lặp lại cho tới khi chương trình được thực thi theo tất cả các đường đi. Do các chương trình được thực thi với những giá trị cụ thể nên có thể thấy rằng tất cả các đường đi phân tích được trong quá trình thực thi tượng trưng động đều là các đường đi khả thi.
 
-Với ví dụ trong Hình \ref{refhinh1} (trang \pageref{refhinh1}), Concolic testing sẽ sinh ra một vài giá trị ngẫu nhiên cho tham số đầu vào, giả sử là \textit{{x=22,y=7}} và thực thi chương trình với cả với các giá trị tượng trưng và cụ thể. Thực thi với giá trị cụ thể sẽ theo nhánh else tại dòng 7 và thực thi tượng trưng sẽ bổ sung ràng buộc \textit{($x_0$\#$2y_0$)} theo đường thực thi của các giá trị cụ thể, đồng thời Concolic testing sẽ lấy phủ định trong ràng buộc đó và giải ràng buộc tương ứng của biểu thức \textit{$x_0$=2*$y_0$} để sinh ra dữ liệu tương ứng là \textit{{x=2,y=1}}. Đầu vào mới này sẽ bắt buộc chương trình thực thi theo nhánh khác với các giá trị cụ thể là \textit{{x=22, y=7}}, tại câu lệnh rẽ nhánh ở dòng 8, giống như trên chương trình thực thi với giá trị \textit{{x=2,y=1}} sẽ thực thi theo nhánh thỏa mãn ràng buộc \textit{($x_0$=2*$y_0$)\&($x_0$<=$y_0$+10)} lấy phủ định của biểu thức \textit{($x_0$<=$y_0$+10)} và sẽ giải ràng buộc tương ứng là \textit{($x_0$=2*$y_0$)\&($x_0$>$y_0$+10)} để sinh ra ràng buộc tương ứng là \textit{{x=30, y=15}}. Chương trình sẽ gặp câu lệnh ERROR với đầu vào mới này, sau lần thực thi lần thứ 3 này Concolic testing sẽ báo rằng tất cả các đường thực thi của chương trình đã được khám phá và dừng thực hiện. Chú ý rằng trong ví dụ này concolic testing đã khám phá tất cả các đường thực thi của chương trình và sử dụng chiến thuật tìm kiếm theo chiều sâu.
+Với ví dụ trong Hình \ref{refhinh1} (trang \pageref{refhinh1}), Concolic testing sẽ sinh ra một vài giá trị ngẫu nhiên cho tham số đầu vào, giả sử là \textit{{x=22,y=7}} và thực thi chương trình với cả các giá trị tượng trưng và cụ thể. Thực thi với giá trị cụ thể sẽ theo nhánh else tại dòng 7 và thực thi tượng trưng sẽ bổ sung ràng buộc \textit{($x_0$\#$2y_0$)} theo đường thực thi của các giá trị cụ thể, đồng thời Concolic testing sẽ lấy phủ định trong ràng buộc đó và giải ràng buộc tương ứng của biểu thức \textit{$x_0$=2*$y_0$} để sinh ra dữ liệu tương ứng là \textit{{x=2,y=1}}. Đầu vào mới này sẽ bắt buộc chương trình thực thi theo nhánh khác với các giá trị cụ thể là \textit{{x=22, y=7}}, tại câu lệnh rẽ nhánh ở dòng 8, giống như trên chương trình thực thi với giá trị \textit{{x=2,y=1}} sẽ thực thi theo nhánh thỏa mãn ràng buộc \textit{($x_0$=2*$y_0$)\&($x_0$<=$y_0$+10)} lấy phủ định của biểu thức \textit{($x_0$<=$y_0$+10)} và sẽ giải ràng buộc tương ứng là \textit{($x_0$=2*$y_0$)\&($x_0$>$y_0$+10)} để sinh ra ràng buộc tương ứng là \textit{{x=30, y=15}}. Chương trình sẽ gặp câu lệnh ERROR với đầu vào mới này, sau lần thực thi lần thứ 3 này Concolic testing sẽ báo rằng tất cả các đường thực thi của chương trình đã được khám phá và dừng thực hiện. Chú ý rằng trong ví dụ này concolic testing đã khám phá tất cả các đường thực thi của chương trình và sử dụng chiến thuật tìm kiếm theo chiều sâu.
 
 \item \textbf{Execution Generated Testing (EGT)}
 
@@ -139,28 +143,29 @@ Một trong những lợi thế chính của phương pháp kết hợp là “t
 
 Ví dụ các chương trình thực tế luôn phải tương tác với thế giới từ bên ngoài như là: sử dụng các thư viện ngoài mà nó không hỗ trợ thực thi tượng trưng hoặc sử dụng các lời gọi từ hệ điều hành. Nếu tất cả các đối số được truyền cho lời gọi hàm như vậy đều là các giá trị cụ thể thì lời gọi hàm có thể được thực hiện một cách đơn giản với các giá trị cụ thể như là thực thi với chương trình gốc. Tuy nhiên, ngay cả khi nếu một vài toán hạng là tượng trưng thì thực thi tượng trưng động sẽ sử dụng một trong những giá trị cụ thể của toán hạng tương ứng đó.
 
-EGT thực hiện đơn giản hóa ràng buộc chỉ để kiểm tra sự thỏa mãn tại đường đi hiện tại. Trong khi concolic sử dụng ngay các giá trị cụ thể tại thời điểm thực thi của chương trình cho đầu vào từ thực thi concolic hiện thời. Bên cạnh những mã nguồn bên ngoài, sự thiếu chính xác (tương đối) của thực thi tượng trưng còn thể hện ở một vài điểm như là không giải quyết được một số toán tử (dấu phảy động) hoặc những hàm phức tạp không giải được bởi bộ giải ràng buộc, việc sử dụng các giá trị cụ thể cho phép thực thi tượng trưng động khôi phục lại những thiếu sót và chi phí của nó là có thể thiếu một vài đường thực thi. Do vậy EGT mất đi tính đầy đủ.
+EGT thực hiện đơn giản hóa ràng buộc chỉ để kiểm tra sự thỏa mãn tại đường đi hiện tại. Trong khi concolic sử dụng ngay các giá trị cụ thể tại thời điểm thực thi của chương trình cho đầu vào từ thực thi concolic hiện thời. Bên cạnh những mã nguồn bên ngoài, sự thiếu chính xác (tương đối) của thực thi tượng trưng còn thể hiện ở một vài điểm như là không giải quyết được một số toán tử (dấu phảy động) hoặc những hàm phức tạp không giải được bởi bộ giải ràng buộc, việc sử dụng các giá trị cụ thể cho phép thực thi tượng trưng động khôi phục lại những thiếu sót và chi phí của nó là có thể thiếu một vài đường thực thi. Do vậy EGT mất đi tính đầy đủ.
 
 Để làm rõ điều này chúng tôi sẽ minh họa hành vi của Concolic testing với ví dụ thực hiện hàm twice() mà giá trị trả về là phi tuyến \textit{(v*v)\%50} (xem trong Hình \ref{refhinh4} (trang \pageref{refhinh4})) . Giả sử rằng Concolic testing bắt đầu thực hiện với giá trị ngẫu nhiên cho tham số đầu vào là \textit{{x=22, y=7}}. Với giá trị này Concolic testing sẽ sinh ra ràng buộc đường đi là:  \textit{$x_0$\#$y_0$*$y_0$\%50}. Nếu giả sử rằng bộ giải ràng buộc không giải được với với ràng buộc phi tuyến thì Concolic testing sẽ thất bại trong việc sinh dữ liệu đầu vào cho đường thực thi tiếp theo. Chúng ta có trường hợp tương tự khi mã nguồn cho hàm twice() là không xác định (do bên thứ 3 cung cấp và là mã nguồn đóng hoặc là lời gọi từ hệ thống). Trong trường hợp đó ràng buộc đường đi sẽ là \textit{$x_0$=twice($y_0$)} và twice() là hàm không xác định (interpreted function). Concolic testing giải quyết tình huống này bằng cách thay thế một vài giá trị tượng trưng bằng giá trị cụ thể. Kết quả là ràng buộc sẽ trở lên đơn giản và có thể giải được bằng bộ giải hiện thời. Với ví dụ trên, Concolic testing sẽ thay thế \textit{$y_0$} bởi một giá trị cụ thể là 7 nó sẽ đơn giản hóa ràng buộc là \textit{$x_0$=49}. Khi giải ràng buộc này, Concolic testing sẽ có kết quả là \textit{{x=49, y=8}} để thực thi những đường đi chưa khám phá trước đó.
 
-Chú ý rằng khả năng đơn giản hóa ràng buộc do sử dụng các giá trị cụ thể giúp sinh các dữ liệu test cho những đường thực thi của chương trình mà thực thi tượng tưng bị cản trở. Nhưng, sự đơn giản hóa đó sẽ đi kèm với với một số thiếu sót nhất định, Nó có thể mất đi tính đầy đủ có nghĩa là nó có thể không sinh được dữ liệu kiểm thử cho một vài đường thực thi. Tuy nhiên, rõ ràng là nó phù hợp cho việc thay thế hoặc bỏ qua một vài đường thực thực thi không hỗ trợ hay đối với các hàm mở rộng từ bên ngoài khi gặp phải.
+Chú ý rằng khả năng đơn giản hóa ràng buộc do sử dụng các giá trị cụ thể giúp sinh các dữ liệu test cho những đường thực thi của chương trình mà thực thi tượng trưng bị cản trở. Nhưng, sự đơn giản hóa đó sẽ đi kèm với một số thiếu sót nhất định, Nó có thể mất đi tính đầy đủ có nghĩa là nó có thể không sinh được dữ liệu kiểm thử cho một vài đường thực thi. Tuy nhiên, rõ ràng là nó phù hợp cho việc thay thế hoặc bỏ qua một vài đường thực thực thi không hỗ trợ hay đối với các hàm mở rộng từ bên ngoài khi gặp phải.
 
 \end{enumerate}
 
 \subsection{CTGEN}
-Trong phần này tôi sẽ trình bày về CTGEN một công cụ tạo thử nghiệm tự động dựa trên kỹ thuật Symbolic execution. Mục tiêu của CTGEN là bao quát mọi chi nhánh trong chương trình nhưng đây là một vấn đề không thể giải quyết được, vì vậy trong thực tế CTGEN cố gắng tạo ra thử nghiệm với độ bao phủ cao cho các modul trong các thử nghiệm. Đối với mỗi đơn vị được thử nghiệm, CTGEN thực hiện phân tích biểu tượng và tạo một thử nghiệm theo cú pháp RTTester \cite{mollerverified} có thể được biên dịch và thực hiện trực tiếp. Ngoài các biến có kiểu dữ liệu cơ bản, CTGEN còn hỗ trợ các biến có dấu chấm động, con trỏ, cấu trúc và mảng. CTGEN có thể đối phó với các vấn đề điển hình trong C bởi sử dụng con trỏ và mảng. Trong CTGEN các hàm đệ quy, bộ nhớ động, cấu trúc dữ liệu động phức tạp với các con trỏ (lists, stacks,...) và các luồng chương trình đồng thời sẽ không được hổ trợ. CTGEN không kiểm tra modul đang thử nghiệm để tìm lỗi thời gian chạy mà nó giao nhiệm vụ này cho một trình thông dịch trừu tượng khác \cite{peleska2011automated}.
+Trong phần này tôi sẽ trình bày về CTGEN một công cụ tạo các bộ thử nghiệm tự động dựa trên kỹ thuật Symbolic execution. Mục tiêu của CTGEN là bao quát mọi đường đi trong chương trình nhưng đây là một vấn đề không thể giải quyết được, vì vậy trong thực tế CTGEN cố gắng tạo ra thử nghiệm với độ bao phủ cao cho các module trong các thử nghiệm. Đối với mỗi đơn vị được thử nghiệm, CTGEN thực hiện phân tích biểu tượng và tạo một thử nghiệm theo cú pháp RTTester \cite{mollerverified} có thể được biên dịch và thực hiện trực tiếp. Ngoài các biến có kiểu dữ liệu cơ bản, CTGEN còn hỗ trợ các biến có dấu chấm động, con trỏ, cấu trúc và mảng. CTGEN có thể đối phó với các vấn đề điển hình trong C bởi sử dụng con trỏ và mảng. Trong CTGEN các hàm đệ quy, bộ nhớ động, cấu trúc dữ liệu động phức tạp với các con trỏ (lists, stacks,...) và các luồng chương trình đồng thời sẽ không được hổ trợ. CTGEN không kiểm tra module đang thử nghiệm để tìm lỗi thời gian chạy mà nó giao nhiệm vụ này cho một trình thông dịch trừu tượng khác \cite{peleska2011automated}.
 
-\indent CTGEN không dựa vào kiến thức về tất cả các phần của chương trình chẳng hạn như các chức năng thư viện hoặc không xác định. Khi một số công cụ tự động kiểm tra đơn vị khác rơi vào lệnh gọi các sub-function với các giá trị đầu vào cụ thể, nếu một external function xảy ra trên đường dẫn đang thực thi, CTGEN sẽ tự động tạo ra một đối tượng giả thay thế external function bởi test stub. Hơn nữa nó sẽ tính toán các giá trị cho dữ liệu trả về stub, các tham số đầu ra và các biến toàn cục có thể được sửa đổi bời stubbed function để đáp ứng điều kiện đường dẫn. Theo cách này, CTGEN cũng có thể mô phỏng hành vi đặc biệt của các external function.
+\indent CTGEN không dựa vào kiến thức về tất cả các phần của chương trình chẳng hạn như các chức năng thư viện hoặc không xác định. Khi một số công cụ tự động kiểm tra đơn vị khác rơi vào lệnh gọi các sub-function với các giá trị đầu vào cụ thể, nếu một external function xảy ra trên đường dẫn đang thực thi, CTGEN sẽ tự động tạo ra một đối tượng giả thay thế external function bởi test stub. Hơn nữa nó sẽ tính toán các giá trị cho dữ liệu trả về stub, các tham số đầu ra và các biến toàn cục có thể được sửa đổi bởi stubbed function để đáp ứng điều kiện đường dẫn. Theo cách này, CTGEN cũng có thể mô phỏng hành vi đặc biệt của các external function.
 
 \indent CTGEN được phân biệt với các công cụ khác với các khả năng sau: xử lý các cuộc gọi đến external function bằng các đối tượng giả, con trỏ tượng trưng và xử lý bù trừ, theo dõi yêu cầu. Con trỏ và external function là các thách thức quan trọng nhất đối với các công cụ tạo dữ liệu thử nghiệm và CTGEN là một công cụ có thể xử lý cả hai vấn đề này.
 
-\indent CTGEN được cấu trúc thành hai phần chính: (Hình 5)
+\indent CTGEN được cấu trúc thành hai phần chính: (Hình \ref{refhinh5} trang \pageref{refhinh5})
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics{hinhanh/hinh5}
+\includegraphics[scale=0.8]{hinhanh/hinh5}
 \end{center}
 \caption{Kiến trúc tổng quan của CTGEN}
+\label{refhinh5}
 \end{figure}
 
 \indent Bộ tiền xử lý hoạt động trên mã UUT. Nó bao gồm các chú thích mã tiền xử lý CTGEN, một pluggin GCC biên dịch mã nguồn đã chuẩn bị thành một đặc tả văn bản bao gồm biểu đồ luồng điều khiển (CFG) và thông tin bảng ký hiệu như function signatures, types và variables, trình phân tích cú pháp , chuyển đổi CFG và thông tin bảng ký hiệu thành biễu diễn mô hình trung gian (IMR).
@@ -171,35 +176,37 @@ PATHCRAWLER là một công cụ tạo bộ thử nghiệm cho các chương tr�
 
 \indent PATHCRAWLER đã được phát triển tại CEA List từ năm 2002. Trong những năm qua nó đã được mở rộng để xử lý một tập hợp con lớn hơn của các chương trình C và áp dụng cho nhiều vấn đề phân biệt, thường được áp dụng nhiều nhất trong các phần mềm nhúng. Trong năm 2010, nó đã được cung cấp công khai dưới dạng máy chủ thử nghiệm trực tuyến, để đánh giá và sử dụng trong giảng dạy.
 
-\indent PATHCRAWLER được xây dựng dựa trên kỹ thuật Symbolic execution. Người dùng cung cấp các tệp có thể biên dịch có chứa mã chương trình C hoàn chỉnh của hàm được kiểm tra (gọi là f) và tất cả các hàm khác có thể gọi trực tiếp hoặc gián tiếp bởi hàm f. Họ cũng có thể chọn tiêu chí bảo hiểm và bất kỳ giới hạn nào về số lần lặp lại trong các đường dẫn được bảo hiểm cũng như một điều kiện tiên quyết tùy chọn để xác định bối cảnh thử nghiệm. Công việc tạo bộ thử nghiệm bằng PATHCRAWLER gồm hai giai đoạn chính. Trong giai đoạn đầu tiên, PATHCRAWLER trích xuất các đầu vào của f và tạo ra một khai thác thử nghiệm được sử dụng để thực hiện f trên một trường hợp thử nghiệm nhất định. Khai thác thử nghiệm về cơ bản là một phiên bản cụ thể của mã tạo ra dấu vết của đường dẫn được bao phủ bởi mỗi trường hợp thử nghiệm. Các đầu vào được trích xuất bao gồm các tham số chính thức của f và các biến toàn cục không cố định được sử dụng bởi f. Mỗi trường hợp thử nghiệm sẽ cung cấp một giá trị cho mỗi đầu vào này. Giai đoạn này sử dụng nền tảng FRAMA-C \cite{kirchner2015frama}, được phát triển tại CEA List. Giai đoạn thứ hai tạo ra các đầu vào thử nghiệm để tôn trọng tiêu chí bảo hiểm đã chọn.  Giai đoạn này dựa trên thực thi biểu tượng, tạo ra các ràng buộc đối với các giá trị đầu vào tượng trưng và giải quyết ràng buộc để tìm giải pháp, dưới dạng các giá trị đầu vào cụ thể mới, cho một tập các ràng buộc mới. Thật vậy, thực thi tượng trưng được sử dụng để phân tích dấu vết của đường dẫn thực hiện theo sau khi khai thác thực thi f trên các giá trị đầu vào cụ thể của từng trường hợp thử nghiệm được tạo và tạo ra vị từ đường dẫn xác định các biến đầu vào khiến đường dẫn đó bị che lấp.
+\indent PATHCRAWLER được xây dựng dựa trên kỹ thuật Symbolic execution. Người dùng cung cấp các tệp có thể biên dịch có chứa mã chương trình C hoàn chỉnh của hàm được kiểm tra (gọi là f) và tất cả các hàm khác có thể gọi trực tiếp hoặc gián tiếp bởi hàm f. Họ cũng có thể chọn tiêu chí bao phủ và bất kỳ giới hạn nào về số lần lặp lại trong các đường dẫn được bao phủ cũng như một điều kiện kiên quyết tùy chọn để xác định bối cảnh thử nghiệm. Công việc tạo bộ thử nghiệm bằng PATHCRAWLER gồm hai giai đoạn chính. Trong giai đoạn đầu tiên, PATHCRAWLER trích xuất các đầu vào của f và tạo ra một khai thác thử nghiệm được sử dụng để thực hiện f trên một trường hợp thử nghiệm nhất định. Khai thác thử nghiệm về cơ bản là một phiên bản cụ thể của mã tạo ra dấu vết của đường dẫn được bao phủ bởi mỗi trường hợp thử nghiệm. Các đầu vào được trích xuất bao gồm các tham số chính thức của f và các biến toàn cục không cố định được sử dụng bởi f. Mỗi trường hợp thử nghiệm sẽ cung cấp một giá trị cho mỗi đầu vào này. Giai đoạn này sử dụng nền tảng FRAMA-C \cite{kirchner2015frama}, được phát triển tại CEA List. Giai đoạn thứ hai tạo ra các đầu vào thử nghiệm để tôn trọng tiêu chí bao phủ đã chọn.  Giai đoạn này dựa trên thực thi tượng trưng , tạo ra các ràng buộc đối với các giá trị đầu vào tượng trưng và giải quyết ràng buộc để tìm giải pháp dưới dạng các giá trị đầu vào cụ thể mới, cho một tập các ràng buộc mới. Thật vậy, thực thi tượng trưng được sử dụng để phân tích dấu vết của đường dẫn thực hiện theo sau khi khai thác thực thi f trên các giá trị đầu vào cụ thể của từng trường hợp thử nghiệm được tạo và tạo ra vị từ đường dẫn xác định các biến đầu vào khiến đường dẫn đó bị che lấp.
 
-\indent Cấu trúc tổng quan của PATCHCRAWLER được minh họa trong Hình 6.
+Cấu trúc tổng quan của PATHCRAWLER được minh họa trong Hình \ref{refhinh6} (trang \pageref{refhinh6}).
+
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.7]{hinhanh/pathcrawler}
+\includegraphics[scale=0.7]{hinhanh/pathcrawler}
 \end{center}
-\caption{Kiến trúc tổng quan của CTGEN}
+\caption{Kiến trúc tổng quan của PATHCRAWLER}
+\label{refhinh6}
 \end{figure}
 
-Công cụ tạo thử nghiệm chung PATHCRAWLER có ba thành phần chính. Một công cụ kiểm tra đồng thời, PATHCRAWLER, được sử dụng để tạo các trường hợp kiểm thử cho một chương trình C nhất định. Việc tạo các đầu vào kiểm tra cụ thể cho một đường dẫn chương trình nhất định phụ thuộc vào bộ giải ràng buộc, COLIBRI. Cơ chế đặc tả của lable và chiến lược lable-oriented cụ thể cho phép hỗ trợ hiệu quả tiêu chí độ bao phủ thử nghiệm mong muốn được thể hiện dưới dạng lable. Để thích ứng với PATHCRAWLER cho bối cảnh công nghiệp cụ thể, các module bổ sung đã được MERCE, chi nhánh nghiên cứu của đối tác công nghiệp phát triển. Chúng bao gồm ANNOTATOR (thể hiện tiêu chí mục tiêu cụ thể về lable), STUBBER (tạo ra các stubs cần thiết) và PROCESSOR OUTPUT (tạo báo cáo thử nghiệm cần thiết).
+Công cụ tạo thử nghiệm chung PATHCRAWLER có ba thành phần chính. Một công cụ kiểm tra đồng thời, PATHCRAWLER, được sử dụng để tạo các trường hợp kiểm thử cho một chương trình C nhất định. Việc tạo các đầu vào kiểm tra cụ thể cho một đường dẫn chương trình nhất định phụ thuộc vào bộ giải ràng buộc, COLIBRI. Cơ chế đặc tả của labels và chiến lược label-oriented cụ thể cho phép hỗ trợ hiệu quả tiêu chí độ bao phủ thử nghiệm mong muốn được thể hiện dưới dạng label. Để thích ứng với PATHCRAWLER cho bối cảnh công nghiệp cụ thể, các module bổ sung đã được MERCE, chi nhánh nghiên cứu của đối tác công nghiệp phát triển. Chúng bao gồm ANNOTATOR (thể hiện tiêu chí mục tiêu cụ thể về label), STUBBER (tạo ra các stubs cần thiết) và PROCESSOR OUTPUT (tạo báo cáo thử nghiệm cần thiết).
 
-\indent PATHCRAWLER khác biệt theo hai cách chính so với các công cụ khác dựa trên sự kết hợp giữa giá trị đầu vào cụ thể và tượng trưng. Giống như các công cụ khác, PATHCRAWLER chạy chương trình đang được thử nghiệm trên từng trường hợp thử nghiệm để khôi phục lại dấu vết của đường dẫn thực thi. Tuy nhiên, trong trường hợp PATHCRAWLER's, thực thi thực tế được chọn thay vì thực thi tượng trưng chỉ vì lý do hiệu quả và để chứng minh rằng thử nghiệm thực sự kích hoạt đường dẫn thực hiện dự định. Không giống các công cụ được thiết kế chủ yếu để tìm lỗi, PATHCRAWLER không sử dụng thực thi thực tế để khôi phục kết quả cụ thể của các phép tính mà nó không thể xử lý. Điều này là do các kết quả này chỉ có thể cung cấp một mô hình chưa hoàn chỉnh của chương trình ngữ nghĩa và chương trình PATHCRAWLER nhằm mục đích bảo hiểm hoàn toàn cho một loại chương trình nhất định thay vì bảo hiểm không đầy đủ cho bất kỳ chương trình nào.
+\indent PATHCRAWLER khác biệt theo hai cách chính so với các công cụ khác dựa trên sự kết hợp giữa giá trị đầu vào cụ thể và tượng trưng. Giống như các công cụ khác, PATHCRAWLER chạy chương trình đang được thử nghiệm trên từng trường hợp thử nghiệm để khôi phục lại dấu vết của đường dẫn thực thi. Tuy nhiên, trong trường hợp PATHCRAWLER's, thực thi thực tế được chọn thay vì thực thi tượng trưng chỉ vì lý do hiệu quả và để chứng minh rằng thử nghiệm thực sự kích hoạt đường dẫn thực hiện dự định. Không giống các công cụ được thiết kế chủ yếu để tìm lỗi, PATHCRAWLER không sử dụng thực thi thực tế để khôi phục kết quả cụ thể của các phép tính mà nó không thể xử lý. Điều này là do các kết quả này chỉ có thể cung cấp một mô hình chưa hoàn chỉnh của chương trình ngữ nghĩa và chương trình PATHCRAWLER nhằm mục đích bao phủ hoàn toàn cho một loại chương trình nhất định thay vì bảo hiểm không đầy đủ cho bất kỳ chương trình nào.
 
-\indent Thật vậy, ngay cả với phạm vi bảo hiểm không đầy đủ, nhiều lỗi thường có thể được phát hiện, nhưng PATHCRAWLER được thiết kế để sử dụng trong các quy trình xác minh chính thức hơn, trong đó phạm vi bảo hiểm phải được định lượng và chứng minh để có thể sử dụng kết hợp với các kỹ thuật phân tích tĩnh \cite{petiot2014test}. Nếu một nhánh hoặc đường dẫn không được bao phủ bởi một thử nghiệm, thì tính không thể đạt được của nhánh hoặc tính không khả thi của đường dẫn phải được thể hiện. Tính đúng đắn và đầy đủ là cần thiết cho sự hài lòng 100\% của một tiêu chí bảo hiểm. Tạo trường hợp thử nghiệm là thăm dò, khi mỗi trường hợp thử nghiệm bao gồm mục tiêu thử nghiệm được tạo và hoàn thành, khi không có trường hợp thử nghiệm đối với một số mục tiêu thử nghiệm có nghĩa là mục tiêu này không khả thi hoặc không thể truy cập được.
+\indent Thật vậy, ngay cả với phạm vi bao phủ không đầy đủ, nhiều lỗi thường có thể được phát hiện, nhưng PATHCRAWLER được thiết kế để sử dụng trong các quy trình xác minh chính thức hơn, trong đó phạm vi bao phủ phải được định lượng và chứng minh để có thể sử dụng kết hợp với các kỹ thuật phân tích tĩnh \cite{petiot2014test}. Nếu một nhánh hoặc đường dẫn không được bao phủ bởi một thử nghiệm, thì tính không thể đạt được của nhánh hoặc tính không khả thi của đường dẫn phải được thể hiện. Tính đúng đắn và đầy đủ là cần thiết cho sự hài lòng 100\% của một tiêu chí bảo hiểm. Tạo trường hợp thử nghiệm là thăm dò, khi mỗi trường hợp thử nghiệm bao gồm mục tiêu thử nghiệm được tạo và hoàn thành, khi không có trường hợp thử nghiệm đối với một số mục tiêu thử nghiệm có nghĩa là mục tiêu này không khả thi hoặc không thể truy cập được.
 
 \indent Tính đúng đắn của phương pháp PATHCRAWLER được xác minh bằng cách thực hiện cụ thể các trường hợp thử nghiệm được tạo trên phiên bản cụ thể của chương trình đang được thử nghiệm. Dấu vết thu được từ việc thực hiện cụ thể của một trường hợp thử nghiệm xác nhận rằng trường hợp thử nghiệm này thực sự thực thi đường dẫn mà nó được tạo ra.
 
 \indent Tính đầy đủ chỉ có thể được đảm bảo khi tất cả các mục tiêu có thể được bao phủ bởi một số lượng các trường hợp thử nghiệm hợp lý, thực thi tượng trưng thể hiện chính xác ngữ nghĩa của C và giải quyết ràng buộc luôn kết thúc trong một thời gian hợp lý. Lưu ý rằng tính đầy đủ và xác minh tính đúng đắn trên mã công cụ thực sự đòi hỏi phải thực thi biểu tượng các tính năng của chương trình để được điều chỉnh phù hợp với nền tảng đích được thực hiện trong cùng một môi trường. PATHCRAWLER hiện chỉ thích nghi với môi trường phát triển Linux và Intel-based platform. Chiến lược tìm kiếm của phương pháp PATHCRAWLER là đảm bảo lặp lại trên tất cả các đường dẫn khả thi của chương trình, cần thiết cho sự hoàn chỉnh, cho tất cả các chương trình kết thúc với nhiều đường dẫn chính xác. Các chương trình chứa các vòng lặp vô hạn không thể được kiểm tra trong mọi trường hợp theo cách chúng tôi mô tả ở đây, vì việc thực hiện chương trình trên các đầu vào kiểm tra sẽ không bao giờ chấm dứt. Bất kỳ vòng lặp vô hạn nào được đưa vào do lỗi chỉ có thể được phát hiện khi hết thời gian thực hiện từng trường hợp thử nghiệm trên mã được ghi. Việc kết thúc các chương trình có số lượng đường dẫn vô hạn phải có số lượng đầu vào vô hạn và đây là một loại chương trình khác không thể được kiểm tra bằng phương pháp PATHCRAWLER.
 
-\indent Sự khác biệt chính thứ hai giữa PATHCRAWLER và các công cụ tương tự khác là PATHCRAWLER không dựa trên bộ giải số học tuyến tính hoặc bộ giải mã SMT mà dựa trên bộ giải hạn chế miền hữu hạn COLIBRI, cũng được phát triển tại CEA List. Cả PATHCRAWLER và COLIBRI đều được triển khai trong Lập trình logic ràng buộc, tạo điều kiện kiểm soát mức độ phân giải ràng buộc ở mức độ thấp và phát triển các ràng buộc chuyên biệt, cũng như cung cấp cơ chế quay lui hiệu quả.  Trong PATHCRAWLER, các ràng buộc chuyên biệt đã được phát triển để xử lý các hoạt động bit, mảng với bất kỳ số lượng kích thước biến và truy cập mảng nào sử dụng các giá trị chỉ số biến (index value). Nỗ lực điều trị chính xác tất cả các hướng dẫn C đang diễn ra nhưng PATHCRAWLER có thể đã xử lý một lớp lớn các chương trình C.
+\indent Sự khác biệt chính thứ hai giữa PATHCRAWLER và các công cụ tương tự khác là PATHCRAWLER không dựa trên bộ giải số học tuyến tính hoặc bộ giải mã SMT mà dựa trên bộ giải hạn chế miền hữu hạn COLIBRI, cũng được phát triển tại CEA List. Cả PATHCRAWLER và COLIBRI đều được triển khai trong lập trình logic ràng buộc, tạo điều kiện kiểm soát mức độ phân giải ràng buộc ở mức độ thấp và phát triển các ràng buộc chuyên biệt, cũng như cung cấp cơ chế quay lui hiệu quả.  Trong PATHCRAWLER, các ràng buộc chuyên biệt đã được phát triển để xử lý các hoạt động bit, mảng với bất kỳ số lượng kích thước và truy cập mảng nào sử dụng các giá trị chỉ số biến (index value). Nỗ lực điều trị chính xác tất cả các hướng dẫn C đang diễn ra nhưng PATHCRAWLER có thể đã xử lý một lớp lớn các chương trình C.
 
 \indent PathCrawler đưa ra kết quả chi tiết dưới dạng các tệp XML. Chúng bao gồm số liệu thống kê tổng thể về phiên kiểm tra, bao gồm các kết quả về phạm vi bao phủ, cho dù phiên kết thúc bình thường hay hết giờ hoặc bị lỗi và thời gian bắt đầu và kết thúc. Đối với mỗi trường hợp thử nghiệm, các giá trị đầu vào, kết quả, đường dẫn được bao phủ và giá trị đầu ra cụ thể được cung cấp. Kết quả là sự phán quyết theo xác nhận của người dùng nếu được cung cấp hoặc có thể là lỗi thời gian chạy, hết thời gian hoặc phát hiện biến đơn vị. Các giá trị đầu ra tượng trưng cũng được đưa ra. Ngoài ra, đối với mỗi tiền tố đường dẫn không thể được bao phủ, lý do được đưa ra: thể hiện tính không khả thi, thời gian chờ giải quyết ràng buộc, giới hạn số lần lặp lại hoặc xây dựng ngôn ngữ C chưa được xử lý. Vị từ (the predicate) trên các biến đầu vào của từng đường dẫn được bao phủ và tiền tố không được che chở cũng được đưa ra. Trong trường hợp tiền tố đường dẫn được tìm thấy là không khả thi, vị từ có thể được sử dụng để giải thích tính không khả thi cho người dùng và trong trường hợp hết thời gian giải quyết ràng buộc, nó có thể được sử dụng để xác định tính khả thi của đường dẫn theo cách thủ công.
 \subsection{Klee}
-Klee là một công cụ có khả năng tự động tạo ra các thử nghiệm đạt được độ bao phủ cao trên một loạt các chương trình phức tạp và chuyên sâu về môi trường. Công cụ này sử dụng kỹ thuật Symbolic execution. Các thử nghiệm do KLEE tạo ra đạt được độ bao phủ cao, trung bình trên 90\% cho mỗi công cụ và đánh bại đáng kể mức độ bao phủ của các bộ thử nghiệm viết tay của nhà phát triển.
+Klee là một công cụ có khả năng tự động tạo ra các bộ thử nghiệm đạt được độ bao phủ cao trên một loạt các chương trình phức tạp và chuyên sâu về môi trường. Công cụ này sử dụng kỹ thuật Symbolic execution. Các thử nghiệm do KLEE tạo ra đạt được độ bao phủ cao, trung bình trên 90\% cho mỗi công cụ và đánh bại đáng kể mức độ bao phủ của các bộ thử nghiệm viết tay của nhà phát triển.
 
 \indent KLEE được thiết kế để kiểm tra sâu, mạnh mẽ một loạt các ứng dụng, tận dụng các thành phần từ công cụ có trước là EXE \cite{cadar2008exe}. KLEE sử dụng một loạt các tối ưu hóa giải quyết ràng buộc, thể hiện các trạng thái chương trình một cách gọn gàng và sử dụng các phương pháp tìm kiếm để có được phạm vi bao phủ mã cao. Ngoài ra, nó sử dụng một cách tiếp cận đơn giản và dễ hiểu để đối phó với môi trường bên ngoài. Các tính năng này cải thiện hiệu suất của KLEE kèm theo một mức độ lớn và cho phép nó kiểm tra một loạt các chương trình chuyên sâu về hệ thống “out of the box”.
 
-\indent Các bài kiểm tra được tạo tự động của KLEE, có độ bao phủ cao trên một loạt các chương trình thực tế, phức tạp và chuyên sâu về môi trường. Đánh giá chuyên sâu nhất của chúng tôi áp dụng KLEE cho tất cả 89 chương trình 1 trong phiên bản ổn định mới nhất của GNU COREUTILS (phiên bản 6.10), chứa khoảng 80.000 dòng mã thư viện và 61.000 dòng trong các tiện ích thực tế. Các chương trình này tương tác rộng rãi với môi trường của chúng để cung cấp nhiều chức năng, bao gồm quản lý hệ thống tệp (ví dụ: ls, dd, chmod), hiển thị và định cấu hình các thuộc tính hệ thống (ví dụ: logname, printenv, hostname), kiểm soát lệnh gọi (ví dụ: nohup, nice, env), xử lý tệp văn bản (ví dụ: sort, od, patch), v.v. Chúng tạo thành môi trường cấp độ người dùng cốt lõi được cài đặt trên nhiều hệ thống Unix. Chúng được sử dụng hàng ngày bởi hàng triệu người, sửa lỗi được xử lý kịp thời và các bản phát hành mới được đẩy thường xuyên. Hơn nữa, tìm lỗi trong COREUTILS là khó. Chúng được cho là bộ ứng dụng nguồn mở được thử nghiệm tốt nhất hiện có. Năm 1995, thử nghiệm ngẫu nhiên một tập hợp con các tiện ích COREUTILS đã tìm thấy ít lỗi hơn so với bảy hệ thống Unix thương mại \cite{miller2000re}. Lỗ hổng COREUTILS cuối cùng được báo cáo trên cơ sở dữ liệu SecurityFocus hoặc US National Vulnerability là ba năm trước.
+\indent Các bài kiểm tra được tạo tự động của KLEE, có độ bao phủ cao trên một loạt các chương trình thực tế, phức tạp và chuyên sâu về môi trường. Đánh giá chuyên sâu nhất khi áp dụng KLEE cho tất cả 89 chương trình 1 trong phiên bản ổn định mới nhất của GNU COREUTILS (phiên bản 6.10), chứa khoảng 80.000 dòng mã thư viện và 61.000 dòng trong các tiện ích thực tế. Các chương trình này tương tác rộng rãi với môi trường của chúng để cung cấp nhiều chức năng, bao gồm quản lý hệ thống tệp (ví dụ: ls, dd, chmod), hiển thị và định cấu hình các thuộc tính hệ thống (ví dụ: logname, printenv, hostname), kiểm soát lệnh gọi (ví dụ: nohup, nice, env), xử lý tệp văn bản (ví dụ: sort, od, patch), v.v. Chúng tạo thành môi trường cấp độ người dùng cốt lõi được cài đặt trên nhiều hệ thống Unix. Chúng được sử dụng hàng ngày bởi hàng triệu người, sửa lỗi được xử lý kịp thời và các bản phát hành mới được đẩy thường xuyên. Hơn nữa, tìm lỗi trong COREUTILS là khó. Chúng được cho là bộ ứng dụng nguồn mở được thử nghiệm tốt nhất hiện có. Năm 1995, thử nghiệm ngẫu nhiên một tập hợp con các tiện ích COREUTILS đã tìm thấy ít lỗi hơn so với bảy hệ thống Unix thương mại \cite{miller2000re}. Lỗ hổng COREUTILS cuối cùng được báo cáo trên cơ sở dữ liệu SecurityFocus hoặc US National Vulnerability là ba năm trước.
 
 \indent KLEE tìm thấy các lỗi quan trọng trong mã được kiểm tra nhiều. Nó đã tìm thấy mười lỗi nghiêm trọng trong COREUTILS (bao gồm ba lỗi đã thoát khỏi sự phát hiện trong 15 năm), trong đó có nhiều lỗi xảy ra hơn so với báo cáo năm 2006, 2007 và 2008. Thực tế là các trường hợp kiểm tra KLEE có thể được chạy trên phiên bản thô của mã (ví dụ: được biên dịch bằng gcc) giúp đơn giản hóa rất nhiều việc gỡ lỗi và báo cáo lỗi.
 
@@ -207,7 +214,7 @@ Klee là một công cụ có khả năng tự động tạo ra các thử nghi�
 
 \indent KLEE được thiết kế sao cho các đường dẫn được theo sau bởi chương trình chưa sửa đổi sẽ luôn đi theo cùng một đường dẫn mà KLEE đã thực hiện (tức là không có kết quả tích cực giả). Tuy nhiên, tính không xác định trong mã được kiểm tra và lỗi trong KLEE hoặc các mô hình của nó đã tạo ra kết quả tích cực giả trong thực tế. Khả năng chạy lại các bài kiểm tra bên ngoài KLEE, kết hợp với các công cụ tiêu chuẩn như gdb và gcov là vô giá để chẩn đoán các lỗi đó và để xác nhận kết quả của chúng tôi.
 
-\indent Tiếp theo tôi sẽ trình cái nhìn tổng quan về cách thức hoạt động của nó.
+\indent Tiếp theo tôi sẽ trình bày cái nhìn tổng quan về cách thức hoạt động của nó.
 
 \indent KLEE là một thiết kế lại hoàn chỉnh của hệ thống đã có trước đây EXE. Ở mức cao, KLEE hoạt động như một sự kết hợp giữa một hệ điều hành cho các quy trình tượng trưng và trình thông dịch. Mỗi quá trình biểu tượng có một tệp đăng ký, ngăn xếp, bộ đếm chương trình và điều kiện đường dẫn. Để tránh nhầm lẫn với quy trình Unix, chúng tôi đề cập đến đại diện KLEE của một quy trình tượng trưng như một trạng thái. Các chương trình được biên dịch sang ngôn ngữ hợp ngữ LLVM \cite{lattner2004llvm}, một tập lệnh ảo giống như RISC. KLEE trực tiếp diễn giải tập lệnh này và ánh xạ các hướng dẫn đến các ràng buộc mà không cần xấp xỉ.
 
@@ -221,15 +228,19 @@ Klee là một công cụ có khả năng tự động tạo ra các thử nghi�
 \%dst = add i32 \%src0, \%src1
 \end{center}
 
-\indent KLEE truy xuất các phần bổ sung từ các thanh ghi \%src0 và \%src1 và viết một biểu thức mới add (\%src0, \%src1) vào thanh ghi \%dst. Để có hiệu quả, mã xây dựng biểu thức sẽ kiểm tra xem tất cả các toán hạng đã cho có cụ thể không (ví dụ: hằng số) và, nếu vậy, thực hiện thao tác chính, trả về một biểu thức không đổi.
+\indent KLEE truy xuất các phần bổ sung từ các thanh ghi \%src0 và \%src1 và viết một biểu thức mới add (\%src0, \%src1) vào thanh ghi \%dst. Để có hiệu quả, mã xây dựng biểu thức sẽ kiểm tra xem tất cả các toán hạng đã cho có cụ thể không (ví dụ: hằng số) và nếu  thể sẽ thực hiện thao tác chính, trả về một biểu thức không đổi.
 
-\indent Các nhánh có điều kiện lấy một biểu thức boolean (điều kiện nhánh) và thay đổi con trỏ lệnh của trạng thái dựa trên điều kiện là đúng hay sai. KLEE truy vấn bộ giải ràng buộc để xác định xem điều kiện nhánh là có thể đúng hoặc có thể chứng minh sai dọc theo đường dẫn hiện tại; nếu vậy, con trỏ lệnh được cập nhật đến vị trí thích hợp. Mặt khác, cả hai nhánh đều có thể: KLEE nhân bản trạng thái để nó có thể khám phá cả hai đường dẫn, cập nhật con trỏ lệnh và điều kiện đường dẫn trên mỗi đường dẫn một cách thích hợp.
+\indent Các nhánh có điều kiện lấy một biểu thức boolean (điều kiện nhánh) và thay đổi con trỏ lệnh của trạng thái dựa trên điều kiện là đúng hay sai. KLEE truy vấn bộ giải ràng buộc để xác định xem điều kiện nhánh là có thể đúng hoặc có thể chứng minh sai dọc theo đường dẫn hiện tại, nếu vậy con trỏ lệnh được cập nhật đến vị trí thích hợp. Mặt khác, cả hai nhánh đều có thể: KLEE nhân bản trạng thái để nó có thể khám phá cả hai đường dẫn, cập nhật con trỏ lệnh và điều kiện đường dẫn trên mỗi đường dẫn một cách thích hợp.
 
 \indent Các hoạt động nguy hiểm tiềm tàng tạo ra các nhánh kiểm tra xem có tồn tại bất kỳ giá trị đầu vào nào có thể gây ra lỗi không. Ví dụ, một lệnh chia tạo ra một nhánh kiểm tra ước số bằng không. Các nhánh như vậy làm việc giống hệt với các nhánh bình thường. Do đó, ngay cả khi kiểm tra thành công (nghĩa là đã phát hiện lỗi), việc thực thi vẫn tiếp tục trên đường dẫn sai, điều này thêm vào phủ định của kiểm tra dưới dạng một ràng buộc (ví dụ: làm cho ước số không bằng 0). Nếu phát hiện lỗi, KLEE tạo trường hợp kiểm tra để kích hoạt lỗi và chấm dứt trạng thái.
 
 \indent Cũng như các hoạt động nguy hiểm khác, tải và lưu trữ các cấu trúc tạo ra các kiểm tra: trong trường hợp này để kiểm tra xem địa chỉ nằm trong giới hạn của một đối tượng bộ nhớ hợp lệ. Tuy nhiên, hoạt động tải và lưu trữ trình bày một biến chứng bổ sung. Đại diện đơn giản nhất của bộ nhớ được sử dụng bởi mã được kiểm tra sẽ là một mảng byte. Trong trường hợp này, tải và lưu trữ sẽ chỉ đơn giản là ánh xạ tới các biểu thức đọc và ghi tương ứng. Thật không may, STP bộ giải ràng buộc của chúng tôi gần như không thể giải quyết được các ràng buộc kết quả (và cả các bộ giải hạn chế khác mà chúng tôi biết). Do đó như trong EXE, KLEE ánh xạ mọi đối tượng bộ nhớ trong mã được kiểm tra thành một mảng STP riêng biệt (theo nghĩa nào đó, ánh xạ một không gian địa chỉ phẳng thành một phân đoạn). Biểu diễn này cải thiện đáng kể hiệu năng vì nó cho phép STP bỏ qua tất cả các mảng không được tham chiếu bởi một biểu thức đã cho. 
 
 \indent Nhiều hoạt động (chẳng hạn như kiểm tra ràng buộc hoặc sao chép mức ghi đối tượng) yêu cầu thông tin cụ thể của đối tượng. Nếu một con trỏ có thể tham chiếu đến nhiều đối tượng, các thao tác này trở nên khó thực hiện. Để đơn giản, KLEE vượt qua vấn đề này như sau. Khi một con trỏ được ước tính p có thể tham chiếu đến N đối tượng, KLEE nhân bản trạng thái hiện tại N lần. Trong mỗi trạng thái, nó ràng buộc p nằm trong giới hạn của đối tượng tương ứng và sau đó thực hiện thao tác đọc hoặc ghi thích hợp. Mặc dù phương pháp này có thể tốn kém cho các con trỏ có bộ điểm lớn, nhưng hầu hết các chương trình chúng tôi đã thử nghiệm chỉ sử dụng các con trỏ tượng trưng liên quan đến một đối tượng và KLEE được tối ưu hóa tốt cho trường hợp này.
+
+Tổng kết lại thực thi tượng trưng đã trở thành kỹ thuật hiệu quả trong kiểm thử chương trình, nó cung cấp một phương pháp tự động sinh dữ liệu kiểm thử để tìm ra những lỗi của phần mềm ở các cấp độ khác nhau. Những công cụ hiện có như CTGEN, PATHCRAWLER, KLEE có đã cung cấp các kỹ thuật hiệu quả trong kiểm thử và tìm được những lỗi trong nhiều dạng phần mềm khác nhau như: phần mềm điều khiển hệ thống mạng, hệ điều hành đến những ứng dụng ở mức cao.
+
+Trong phần nàu tôi đã trình bày tổng quan về ý tưởng và cách hoạt động của kỹ thuật Symbolic execution cũng như một số công cụ sử dụng kỹ thuật này cho việc sinh các bộ test tự động. Trong phần tiếp theo tôi sẽ trình bày nội dung về công cụ đánh giá tự động cho bài tập lập trình.\newpage
 
 \section{Tổng quan về công cụ đánh giá tự động}
 
@@ -240,6 +251,7 @@ Mục tiêu công việc của tôi là tự động quyết định tính chín
 Giả sử một bài tập lập trình yêu cầu học sinh viết hàm max trả về giá trị lớn nhất của 3 tham số đầu vào số nguyên. Giáo viên sẽ cung cấp solution như (hình a) và chúng tôi nhận được các bài giải của sinh viên (hình b và c) trong đó bài nộp của sinh viên trong hình b là đúng và bài nộp trong hình c là không đúng. Đối với bài nộp đúng sẽ cho ra output giống với output của solution, và các bài nộp không đúng vì bỏ qua các điều kiện biên sẽ cho ra output không giống với output của solution. Cho bộ input đầu vào 
 a=5, b=5, c=3 thì đoạn code solution và đoạn code của sinh viên 1 sẽ cho ra kết quả là 5 còn đoạn code của sinh viên thứ 2 cho ra kết quả là 3 và rõ ràng đoạn code của sinh viên thứ 2 đã cho kết quả không đúng như mọng đợi.Và trong bài viết này tôi hy vọng công cụ chấm điểm của tôi sẽ cho ra kết quả đúng dựa trên các bộ testcase có sẵn.
 
+\begin{multicols}{2}
 \begin{lstlisting}[language=c]
 int max(int a, int b, int c) 
 {
@@ -253,7 +265,7 @@ int max(int a, int b, int c)
 }
 \end{lstlisting}
 \caption{Hình a. Solution}
-
+\newline \newline \newline \newline \newline \newline
 \begin{lstlisting}[language=c]
 int max(int a, int b, int c) 
 { 
@@ -274,6 +286,8 @@ int max(int a, int b, int c)
 }
 \end{lstlisting}
 \caption{Hình b. Sinh viên 1}
+\end{multicols}
+\newpage
 
 \begin{lstlisting}[language=c]
 int max(int a, int b, int c) 
@@ -286,8 +300,10 @@ int max(int a, int b, int c)
         return c;
     }
 }
+
 \end{lstlisting}
-\caption{Hình c. Sinh viên 1}
+\caption{Hình c. Sinh viên 2}
+
 
 \subsection{Ý tưởng chính}
 Trước khi đi vào ý tưởng chính để tạo ra một công cụ chấm điểm tự động thì tôi muốn nói đến khái niệm về công cụ chấm điểm tự động.
@@ -298,19 +314,11 @@ Sử dụng công cụ chấm điểm tự động là một trong những cách
 
 Một công cụ chấm điểm tự động bao gồm các thành phần chính như sau:
 \begin{itemize}
-\item[-] \textbf{Lời giải của solution}
-\item[-] \textbf{Lời giải của sinh viên}
-\item[-] \textbf{Nơi chưa các bộ testcase}
-\item[-] \textbf{Trình so test}
+\item[-] \textbf{Lời giải của solution}: Lời giải của soluotion thông thường sẽ được giáo viên thực hiện trong khi ra đề. Lời giải này thông thường sẽ là lời giải đúng nhất và chạy đúng hết các bộ testcase đưa ra. Công cụ chấm điểm tự động sẽ cho ra kết quả bài tập của sinh viên dựa trên kết quả của solution này.
+\item[-] \textbf{Lời giải của sinh viên}: Lời giải của sinh viên là bài nộp của sinh viên sau khi kết thúc phần thi.
+\item[-] \textbf{Nơi chưa các bộ testcase}: Nơi chứa các bộ testcase là một file bao gồm hai thông tin đó là: số bộ testcase và các bộ testcase tương ứng. Các bộ testcase sẽ được sinh ra tự động theo hai cách đó là: sử dụng tool sinh testcase tự động đối với các trường hợp input đầu vào là các kiểu dự liệu nguyên thủy như int, float,... còn đối với input đầu vào có kiểu phức tạp hơn như Array thì tôi sẽ viết một hàm sinh test case tự động. Hàm sinh test case tự động này sẽ chạy đầu tiên trong công cụ chấm điểm để đảm bảo cung cấp các bộ testcase một cách đầy đủ.
+\item[-] \textbf{Trình so test}: Trình so test là thành phần quan trọng giúp đưa ra điểm số cuối cùng cho bài tập của sinh viên. Để có thể đưa ra được kết quả thì trình so test phải thực thi lần lượt lời giải của solution và lời giải của sinh viên với input đầu vào là bộ testcase được sinh sẵn, sau khi thực thi xong sẽ cho ra hai file chứa output của solution và sinh viên. Kết quả chỉ đúng khi output của solution và sinh viên là giống nhau. Và việc thực thi này được lặp lại n lần với n là số bộ testcase được lưu trong file chưa testcase. Sau khi thực thi xong n lần thì trình so test sẽ có được số lần thực thi đúng và số lần thực thi không đúng và dựa vào kết quả đó để cho ra điểm số cuối cùng.
 \end{itemize}
-
-Lời giải của soluotion thông thường sẽ được giáo viên thực hiện trong khi ra đề. Lời giải này thông thường sẽ là lời giải đúng nhất và chạy đúng hết các bộ testcase đưa ra. Công cụ chấm điểm tự động sẽ cho ra kết quả bài tập của sinh viên dựa trên kết quả của solution này.
-
-Lời giải của sinh viên là bài nộp của sinh viên sau khi kết thúc phần thi.
-
-Nơi chứa các bộ testcase là một file bao gồm hai thông tin đó là: số bộ testcase và các bộ testcase tương ứng. Các bộ testcase sẽ được sinh ra tự động theo hai cách đó là: sử dụng tool sinh testcase tự động đối với các trường hợp input đầu vào là các kiểu dự liệu nguyên thủy như int, float,... còn đối với input đầu vào có kiểu phức tạp hơn như Array thì tôi sẽ viết một hàm sinh test case tự động. Hàm sinh test case tự động này sẽ chạy đầu tiên trong công cụ chấm điểm để đảm bảo cung cấp các bộ testcase một cách đầy đủ.
-
-Trình so test là thành phần quan trọng giúp đưa ra điểm số cuối cùng cho bài tập của sinh viên. Để có thể đưa ra được kết quả thì trình so test phải thực thi lần lượt lời giải của solution và lời giải của sinh viên với input đầu vào là bộ testcase được sinh sẵn, sau khi thực thi xong sẽ cho ra hai file chứa output của solution và sinh viên. Kết quả chỉ đúng khi output của solution và sinh viên là giống nhau. Và việc thực thi này được lặp lại n lần với n là số bộ testcase được lưu trong file chưa testcase. Sau khi thực thi xong n lần thì trình so test sẽ có được số lần thực thi đúng và số lần thực thi không đúng và dựa vào kết quả đó để cho ra điểm số cuối cùng.
 
 \subsection{Cách sinh testcase tự động}
 
@@ -337,7 +345,8 @@ Một Docker container được xây dựng từ một Docker image. Docker imag
 
 Có 2 cách để có được Klee Docker image:
 
-\textbf{Pulling from the Docker Hub}
+\begin{itemize}
+\item[-] \textbf{Pulling from the Docker Hub}
 
 Để tải về một Klee Docker image phiên bản mới nhất chúng ra thực hiện lệnh như sau:
 
@@ -355,23 +364,23 @@ Nếu bạn muốn sử dụng một phiên bản cụ thể của Klee bạn n�
 \end{center}
 \end{figure}
 
-\textbf{Building the Docker image locally}
+\item[-] \textbf{Building the Docker image locally}
 
 Nếu bạn muốn tải một Klee Docker image một cách thủ công thay vì tải về từ Docker hub, bạn có thể làm như vậy bằng cách thực hiên các lệnh sau:
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/builddockerlocal.png}
+\includegraphics[scale=0.3]{hinhanh/builddockerlocal.png}
 \end{center}
 \end{figure}
 
 Hệ thống sẽ sử dụng nội dung của Dockerfile trong thư muc klee để xây dựng Klee Docker image.
 
-Sau khi tải về máy Klee Docker image, chúng ta sẽ tiếp tục tạo một Klee Docker container để có thể  sử dụng được công cụ klee. Cách đơn giản để tạo được một Klee Docker container và có được quyền truy cập shell, bạn cần thực hiện lệnh như sau:
+Sau khi tải về máy Klee Docker image, chúng ta sẽ tiếp tục tạo một Klee Docker container để có thể  sử dụng được công cụ klee. Cách đơn giản để tạo được một Klee Docker container và có được quyền truy cập shell, bạn cần thực hiện lệnh như sau: \newpage
 
-\begin{figure}[ht]
+\begin{figure}[t]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/kleecontainer.png}
+\includegraphics[scale=0.3]{hinhanh/kleecontainer.png}
 \end{center}
 \end{figure}
 
@@ -393,15 +402,15 @@ Bây giờ bạn có thể thử chạy klee bên trong container với một s�
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/kleeversion.png}
+\includegraphics[scale=0.3]{hinhanh/kleeversion.png}
 \end{center}
 \end{figure}
 
-Hoặc là kiểm tra phiên bản clang với câu lệnh như sau: 
+\newpage Hoặc là kiểm tra phiên bản clang với câu lệnh như sau:
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/clangversion.png}
+\includegraphics[scale=0.3]{hinhanh/clangversion.png}
 \end{center}
 \end{figure}
 
@@ -412,6 +421,7 @@ Thực thi câu lệnh exit đê thoát khỏi container.
 \includegraphics[scale=.3]{hinhanh/exitcontainer.png}
 \end{center}
 \end{figure}
+\end{itemize}
 
 \subsubsection{Cài đặt Klee bằng LLVM 6.0}
 
@@ -437,27 +447,37 @@ Cài đặt các dependencies: KLEE yêu cầu tất cả các phụ thuộc c�
 
 Đối với ubuntu, thực hiện các lệnh sau:
 
+\begin{framed}
 \$ sudo apt-get install build-essential curl libcap-dev git cmake libncurses5-dev python-minimal python-pip unzip libtcmalloc-minimal4 libgoogle-perftools-dev libsqlite3-dev doxygen
 
 \$ pip3 install tabulate
+\end{framed}
 
 Đối với MacOS, thực hiện các lệnh sau:
 
+\begin{framed}
 \$ brew install curl git cmake python unzip gperftools sqlite3 doxygen bash
 
 \$ pip3 install tabulate
+\end{framed}
 
 Nếu bạn gặp vấn đề với 'the compiler not finding standard headers under macOS', hãy thử chạy lệnh sau:
 
-\$ open /Library/Developer/CommandLineTools/Packages/macOS\_SDK\_headers\_for\_macOS\_10.14.pkg
+\begin{framed}
+\$open/Library/Developer/CommandLineTools/Packages/macOS\_SDK\_headers \_for\_macOS\_10.14.pkg
+\end{framed}
 
 Tiếp theo chúng ta sẽ tiến hành cài đặt LLVM 6.0. Nếu bạn đang sử dụng Ubuntu hay Debian thì thực hiện câu lệnh sau:
 
+\begin{framed}
 \$ sudo apt-get install clang-6.0 llvm-6.0 llvm-6.0-dev llvm-6.0-tools
+\end{framed}
 
 Đối với MacOS, thực hiện câu lệnh sau:
 
+\begin{framed}
 \$ brew install llvm@6
+\end{framed}
 
 Tiếp theo chúng ta cài đặt bộ constraint solver:
 
@@ -465,19 +485,25 @@ KLEE hỗ trợ nhiều bộ constraint solver khác nhau như STP, Z3, metaSMT,
 
 Tiếp theo chúng ta cần tạo một folder mới để chứa mã nguồn (code) của Klee. Để có được mã nguồn của Klee chúng ta thực hiện câu lệnh sau:
 
+\begin{framed}
 \$ git clone https://github.com/klee/klee.git
+\end{framed}
 
 Sau khi tải mã nguồn Klee từ git về chúng ta tiến hành cấu hình Klee.
 
 KLEE phải được xây dựng “out of source”, vì vậy trước tiên hãy tạo một thư mục build. Bạn có thể tạo cái này bất cứ nơi nào bạn thích. Dưới đây, tôi giả sử bạn tạo thư mục này trong kho lưu trữ KLEE.
 
+\begin{framed}
 \$ mkdir build
+\end{framed}
 
 Bây giờ bạn truy cập vào thư mục build vừa tạo bằng câu lệnh cd và chạy CMake để định cấu hình KLEE trong đó với <KLEE\_SRC\_DIRECTORY> là đường dẫn đến kho lưu trữ git KLEE mà bạn đã tải về trong bước trên. <CMAKE\_OPTIONS> là các tùy chọn cấu hình. Để biết thêm các tùy chọn cấu hình bạn vào xem trong file README-CMake.md trong kho lưu trữ git Klee.
 
+\begin{framed}
 \$ cd build
 
 \$ cmake <CMAKE\_OPTIONS> <KLEE\_SRC\_DIRECTORY>
+\end{framed}
 
 Ví dụ: nếu bạn muốn xây dựng KLEE với STP, thời gian chạy POSIX, klee-uclibc và kiểm tra đơn vị (Unit testing) thì dòng lệnh sẽ trông giống như thế này.
 
@@ -499,7 +525,9 @@ Theo mặc định, KLEE sử dụng tcmalloc làm công cụ cấp phát của 
 
 Cuối cùng từ thư mục build được tạo trong bước trước đó chạy lệnh sau.
 
+\begin{framed}
 \$ make
+\end{framed}
 
 \subsubsection{Ví dụ với Klee}
 
@@ -513,7 +541,7 @@ Tiếp theo chúng ta sẽ tiến hành thực hiện các bước cần thiết
 
 Bời vì Klee là công cụ sinh testcase sử dung kỹ thuật Symbolic execution, nên bước tiếp theo chúng ta sẽ tạo đầu vào tượng trưng cho hàm get\_sign() ở trên.
 
-Để kiểm tra hàm get\_sign() này với KLEE, chúng ta cần chạy nó trên đầu vào tượng trưng. Để đánh dấu một biến là tượng trưng, chúng tôi sử dụng hàm klee\_make\_symbolic() (được định nghĩa trong klee / klee.h), trong đó có ba đối số: địa chỉ của biến (vị trí bộ nhớ) mà chúng tôi muốn coi là biểu tượng, kích thước của nó và một tên (có thể là bất cứ điều gì). Dưới đây là một hàm main() đơn giản đánh dấu một biến a là ký hiệu và sử dụng nó để gọi hàm get\_sign():
+Để kiểm tra hàm get\_sign() này với KLEE, chúng ta cần chạy nó trên đầu vào tượng trưng. Để đánh dấu một biến là tượng trưng, chúng tôi sử dụng hàm klee\_make\_symbolic() (được định nghĩa trong klee / klee.h), trong đó có ba đối số: địa chỉ của biến (vị trí bộ nhớ) mà chúng tôi muốn coi là biểu tượng, kích thước của nó và một tên (có thể là bất cứ điều gì). Dưới đây là một hàm main() đơn giản đánh dấu một biến a là ký hiệu và sử dụng nó để gọi hàm get\_sign(): \newpage
 
 \begin{figure}[ht]
 \begin{center}
@@ -541,7 +569,7 @@ Nếu bạn không muốn phát lại các trường hợp thử nghiệm như �
 \end{center}
 \end{figure}
 
-Tuy nhiên chúng tôi vẫn khuyên bạn nên sử dụng câu lệnh dài hơn ở bên trên.
+Tuy nhiên chúng tôi vẫn khuyên bạn nên sử dụng câu lệnh dài hơn ở bên trên. \newpage
 
 Sau khi biên dịch file get\_sign.c thành mã bit LLVM chúng ta sẽ có được file get\_sign.bc. Bước tiếp theo chúng ta sẽ tiến hành chạy file bitcode vừa được sinh ra. Để chạy KLEE trên tệp bitcode, chỉ cần thực hiện:
 
@@ -570,7 +598,9 @@ Sau khi thực hiện xong câu lệnh ở trên bạn sẽ thấy đầu ra sau
 Dưới đây là các tệp global luôn được tạo khi thực thi Klee:
 
 \begin{itemize}
-\item[-] \textbf{Info}: Đây là một tệp văn bản chứa nhiều thông tin khác nhau liên quan đến việc chạy KLEE. Cụ thể, nó ghi lại dòng lệnh chính xác mà KLEE đã chạy và tổng thời gian thực hiện, ví dụ:
+\item[-] \textbf{Info}: Đây là một tệp văn bản chứa nhiều thông tin khác nhau liên quan đến việc chạy KLEE. Cụ thể, nó ghi lại dòng lệnh chính xác mà KLEE đã chạy và tổng thời gian thực hiện. 
+
+\newpage Ví dụ:
 
 \begin{figure}[ht]
 \begin{center}
@@ -589,13 +619,13 @@ Ngoài ra còn có các file được tạo ra dựa trên các trường hợp:
 
 \begin{itemize}
 \item[-] \textbf{test<N>.ktest}: Chứa thông tin bộ testcase thử nghiệm được tạo bởi Klee trên các trường hợp. Sử dụng công cụ ktest để đọc nội dung. Việc tạo các tệp .ktest có thể bị vô hiệu hóa bằng cách sử dụng tùy chọn --no-output.
-\item[-] \textbf{test<N>.<error-type>.err}: Được tạo cho các  hợp trong đó Klee tìm thấy lỗi. Chứa thông tin về lỗi ở dạng văn bản.
+\item[-] \textbf{test<N>.<error-type>.err}: Được tạo cho các trường hợp trong đó Klee tìm thấy lỗi. Chứa thông tin về lỗi ở dạng văn bản.
 \item[-] \textbf{test<N>.kquery}: Chứa các ràng buộc liên quan đến trường hợp đã cho, theo định dạng KQuery. Việc tạo các tệp này có thể được kích hoạt thông qua cờ --write-kqueries.
 \item[-] \textbf{test<N>.cvc}: Chứa các ràng buộc liên quan đến trường hợp đã cho, ở định dạng CVC. Việc tạo các tệp này có thể được kích hoạt thông qua cờ --write-cvcs. (Đây là thông tin giống như trong tệp .kquery tương ứng.)
 \item[-] \textbf{test<N>.smt2}: Chứa các ràng buộc liên quan đến trường đã cho, ở định dạng SMT-LIBv2. Việc tạo các tệp này có thể được kích hoạt thông qua cờ --write-smt2s. (Đây là thông tin giống như trong tệp .kquery tương ứng.)
 \end{itemize}
 
-Sau khi đã tìm hiểu về các file chứa trong output khi thực thi file bitcode chúng ta cùng xem các trường hợp đã được tạo ra của klee. Các trường hợp thử nghiệm được tạo bởi Klee được ghi vào các tệp có phần mở rộng .ktest. Đây là các tệp nhị phân có thể được đọc với hàm tiện ích ktest-tool. ktest-tool đưa ra các cách biểu diễn khác nhau cho cùng một đối tượng, ví dụ chuỗi byte Python (dữ liệu), số nguyên (int) hoặc văn bản ascii (văn bản). Chúng ta hãy kiểm tra từng file có phần mở rộng .ktest đã được tạo ra ở phần trên:
+Sau khi đã tìm hiểu về các file chứa trong output khi thực thi file bitcode chúng ta cùng xem các trường hợp đã được tạo ra của klee. Các trường hợp thử nghiệm được tạo bởi Klee được ghi vào các tệp có phần mở rộng .ktest. Đây là các tệp nhị phân có thể được đọc với hàm tiện ích ktest-tool. Ktest-tool đưa ra các cách biểu diễn khác nhau cho cùng một đối tượng, ví dụ chuỗi byte Python (dữ liệu), số nguyên (int) hoặc văn bản ascii (văn bản). Chúng ta hãy kiểm tra từng file có phần mở rộng .ktest đã được tạo ra ở phần trên:
 
 \begin{figure}[ht]
 \begin{center}
@@ -608,7 +638,7 @@ Sau khi đã tìm hiểu về các file chứa trong output khi thực thi file 
 \includegraphics[scale=.3]{hinhanh/test2.png}
 \end{center}
 \end{figure}
-
+\newpage
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=.3]{hinhanh/test3.png}
@@ -659,7 +689,7 @@ int lon_nhi(int arr[], int n)
 }
 \end{lstlisting}
 
-Đối với hàm lon\_nhi() với tham số đầu vào là một array và một số nguyên n, Klee không tạo ra được những bộ testcase như mọng đợi. Sau khi được biên dịch thành file bitcode, tôi tiến hành chạy file bitcode để có được output.
+Đối với hàm lon\_nhi() với tham số đầu vào là một array và một số nguyên n, Klee không tạo ra được những bộ testcase như mọng đợi. \newpage Sau khi được biên dịch thành file bitcode, tôi tiến hành chạy file bitcode để có được output.
 
 \begin{figure}[ht]
 \begin{center}
@@ -707,7 +737,7 @@ Hàm setup() bên trên có 4 tham số đầu vào, trong đó lower và upper 
 Sau khi có được file output công cụ sẽ tiến hành chấm điểm bài tập lập trình dựa trên các bộ testcase chứa trong file output đó.
 
 \subsection{Cách ra đề bài}
-Khi giáo viên tiến hành tạo đề bài sẽ tạo trước cho sinh viên một function prototype, function prototype này thể hiện tên của function sinh viên cần hoàn thành và các tham số đầu vào của function này. Nhiệm vụ của sinh viên là đọc hiểu để bài và hoàn thành nội dung bên trong của function.
+Khi giáo viên tiến hành tạo đề bài sẽ tạo trước cho sinh viên một function prototype, function prototype này thể hiện tên của function sinh viên cần hoàn thành và các tham số đầu vào của function này. Nhiệm vụ của sinh viên là đọc hiểu đề bài và hoàn thành nội dung bên trong của function.
 
 Cùng tìm hiểu qua ví dụ sau đây:
 
@@ -721,7 +751,7 @@ Các ràng buộc:
 
 \begin{itemize}
 \item[-] 1 <= n <= 1000
-\item[-] 1 <= arr$_{i}$  <= 1000, trong đó arr$-{i}$ là phần tử thứ i$^{th}$ của mãng.
+\item[-] 1 <= arr$_{i}$  <= 1000, trong đó arr$_{i}$ là phần tử thứ i$^{th}$ của mãng.
 \end{itemize}
 
 Định dạng đầu ra: Kết quả sau khi được xử lý sẽ là một mãng đã được sắp xếp theo thứ tự tăng dần và mãng đó được ghi vào trong file output có phần mở rộng là .txt.
@@ -738,9 +768,10 @@ Output mẫu:
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/outputsample.png}
+\includegraphics[scale=0.4]{hinhanh/outputsample.png}
 \end{center}
 \end{figure}
+\newpage
 
 Function prototype mẫu:
 
@@ -785,7 +816,7 @@ Sau khi đã thực thi chương trình chấm điểm chúng ta sẽ thu đư�
 
 Số điểm =$\frac{ 10 }{ Tong so bo testcase }$ * So bo testcase dung
 
-Ví dụ: Chương trình có 10 bộ testcase, sau khi thực thi kết thúc và thu được 7 bộ testcase cho kết quả chính xác thì số điểm của sinh viên là (10 / 10) * 7 = 7 điểm.
+Ví dụ: Chương trình có 10 bộ testcase, sau khi thực thi kết thúc và thu được 7 bộ testcase cho kết quả chính xác thì số điểm của sinh viên là (10 / 10) * 7 = 7 điểm. \newpage
 
 \section{Thực nghiệm}
 
@@ -817,9 +848,9 @@ Tiếp theo là file solution.c, file này chứa code bài giải của đề b
 
 Tương tự như file solution.c là file sv.c, file này cũng chứa code bài giải của đề bài ở trên. Nhưng khác với solution.c file sv.c là do sinh viên làm và nộp lại. File này cũng tiến hành đọc dữ liệu từ file test.txt để lấy làm input đầu vào và tiến hành thực thi. Sau khi thực thi thành công sẽ cho ra 1 file output là outsv.txt chứa kết quả trả về sau khi thực thi của chương trình.
 
-Cuối cùng là file run.c, file này là file chính để tiến hành chấm điểm cho bài tập lập trình của sinh viên. Đầu tiên chương trình sẽ tiến hành đọc dữ liệu từ file testcase.txt để có được số lượng tổng bộ testcase cần thực hiện. Sau khi có được tổng số bộ testcase chương trình sẽ tiếp hành việc chấm điểm bài tập lập trình của sinh viên bằng cách so sánh kết quả của 2 file solution.c và sv.c. Dựa trên tổng số bộ testcase mà chương trình sẽ lặp với số lần tương ứng, mỗi lần lặp như vậy chương trình sẽ đọc 1 bộ testcase từ file testcase.txt để ghi ra file test.txt. Sau khi bộ test đã được ghi ra file test.txt, 2 file solution.c và sv.c sẽ tiến hành đọc bộ test được ghi trong file test.txt để thực hiện và cho ra output là 2 file out.txt và outsv.txt. Sau khi có được 2 file output chương trình sẽ tiến hành kiểm tra kết quả trong 2 file output có giống nhau hay không. Sau khi kết thúc vòng lặp chúng ta sẽ thu được số bộ test đúng và số bộ test không đúng. Dựa vào kết quả thu được chương trình sẽ tính được điểm của sinh viên (cách tính điểm tôi đã có đề cập trong phần "Cách chấm điểm" ở trên.
+Cuối cùng là file run.c, file này là file chính để tiến hành chấm điểm cho bài tập lập trình của sinh viên. Đầu tiên chương trình sẽ tiến hành đọc dữ liệu từ file testcase.txt để có được số lượng tổng bộ testcase cần thực hiện. Sau khi có được tổng số bộ testcase chương trình sẽ tiếp hành việc chấm điểm bài tập lập trình của sinh viên bằng cách so sánh kết quả của 2 file solution.c và sv.c. Dựa trên tổng số bộ testcase mà chương trình sẽ lặp với số lần tương ứng, mỗi lần lặp như vậy chương trình sẽ đọc 1 bộ testcase từ file testcase.txt để ghi ra file test.txt. Sau khi bộ test đã được ghi ra file test.txt, 2 file solution.c và sv.c sẽ tiến hành đọc bộ test được ghi trong file test.txt để thực hiện và cho ra output là 2 file out.txt và outsv.txt. Sau khi có được 2 file output chương trình sẽ tiến hành kiểm tra kết quả trong 2 file output có giống nhau hay không. Sau khi kết thúc vòng lặp chúng ta sẽ thu được số bộ test đúng và số bộ test không đúng. Dựa vào kết quả thu được chương trình sẽ tính được điểm của sinh viên (cách tính điểm tôi đã có đề cập trong phần "Cách chấm điểm" ở trên).
 
-Trường hợp đầu tiên tôi sẽ tiến hành chấm điểm có bài tập của sinh viên chưa đúng trong một số bộ testcase. Cùng xem qua cách giải quyết của sinh viên sau:
+Trường hợp đầu tiên tôi sẽ tiến hành chấm điểm với bài tập của sinh viên chưa đúng trong một số bộ testcase. Cùng xem qua cách giải quyết của sinh viên sau:
 
 \begin{lstlisting}
 int max(int a, int b, int c)
@@ -911,7 +942,7 @@ Cùng xem qua quá trình chạy thực nghiệm đối với đề bài ở tr�
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/compilerdemo.png}
+\includegraphics[scale=.4]{hinhanh/compilerdemo.png}
 \end{center}
 \end{figure}
 
@@ -919,7 +950,7 @@ Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/cautrucsaucompiler.png}
+\includegraphics[scale=.4]{hinhanh/cautrucsaucompiler.png}
 \end{center}
 \end{figure}
 
@@ -927,9 +958,9 @@ Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/rundemo.png}
+\includegraphics[scale=.4]{hinhanh/rundemo.png}
 \end{center}
-\end{figure}
+\end{figure} \newpage
 
 Kết quả khi chạy file run để chấm điểm.
 
@@ -988,7 +1019,7 @@ Trong lần chấm điểm này bài tập của sinh viên đã đúng hết t�
 
 Ví dụ: Nếu cho một mãng sau arr = [3, 1, 7, 10, 2, 14], sau khi được sắp xếp mãng số nguyên đó sẽ trở thành arr = [1, 2, 3, 7, 10, 14].
 
-Trước khi đi vào chạy thực nghiệm, chúng ta sẽ đi qua tìm hiểu về cách tổ chức thư mục chứa các file dùng để thực thi khi tiến hành thực nghiệm.
+Trước khi đi vào chạy thực nghiệm, chúng ta sẽ đi qua tìm hiểu về cách tổ chức thư mục chứa các file dùng để thực thi khi tiến hành thực nghiệm. \newpage
 
 \begin{figure}[ht]
 \begin{center}
@@ -1160,7 +1191,7 @@ Cũng như ở phần trên tôi sẽ tiến hành biên dịch file run.c trư�
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/compilerdemoarray.png}
+\includegraphics[scale=.4]{hinhanh/compilerdemoarray.png}
 \end{center}
 \end{figure}
 
@@ -1168,7 +1199,7 @@ Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/cautrucarraysaucompiler.png}
+\includegraphics[scale=.4]{hinhanh/cautrucarraysaucompiler.png}
 \end{center}
 \end{figure}
 
@@ -1176,10 +1207,10 @@ Sau khi compiler thành công trong thư mục sẽ xuất hiện thêm file run
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/rundemoarray.png}
+\includegraphics[scale=.4]{hinhanh/rundemoarray.png}
 \end{center}
 \end{figure}
-
+\newpage
 Kết quả khi chạy file run để chấm điểm.
 
 \begin{figure}[ht]
@@ -1188,7 +1219,7 @@ Kết quả khi chạy file run để chấm điểm.
 \end{center}
 \end{figure}
 
-Như hình bên trên chúng ta thấy chương trình có tất cả 10 bộ test. Khi chạy thì chúng ta thấy được các bộ testcase ở lần thứ 3, 7, 9 sẽ thực hiện không chính xác. Ví dụ như ở bộ test thứ 3 với bộ testcase đầu vào là arr = [46, 9, 71, 28, 100, 42, 98] thì kết quả của solution cho ra là [9, 28, 42, 46, 71, 98, 100] còn của sinh viên cho ra kết quả là [9, 28, 46, 42, 71, 100, 98]. Như ta thấy được thì kết quả của solution cho ra là đúng như mong đợi còn kết quả của sinh viên cho ra là chưa chính xác. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ test không đúng của sinh viên là 3 và điểm số của sinh viên là 7.00đ.
+Như hình bên trên chúng ta thấy chương trình có tất cả 10 bộ test. Khi chạy thì chúng ta thấy được các bộ testcase ở lần thứ 3, 7, 9 sẽ thực hiện không chính xác. Ví dụ như ở bộ test thứ 3 với bộ testcase đầu vào là arr = [46, 9, 71, 28, 100, 42, 98] thì kết quả của solution cho ra là [9, 28, 42, 46, 71, 98, 100] còn của sinh viên cho ra kết quả là [9, 28, 46, 42, 71, 100, 98]. Như ta thấy được thì kết quả của solution cho ra là đúng như mong đợi còn kết quả của sinh viên cho ra là chưa chính xác. Sau khi chạy hết tất cả các bộ test chương chình sẽ thông báo số bộ test không đúng của sinh viên là 3 và điểm số của sinh viên là 7.00đ. \newpage
 
 Cùng xem lại thư mục sau khi chạy xong file run.
 
@@ -1221,11 +1252,37 @@ Cũng giống như trường hợp đầu tiên, tôi sẽ biên dịch file run
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=.3]{hinhanh/ketquademoarraydung.png}
+\includegraphics[scale=.28]{hinhanh/ketquademoarraydung.png}
 \end{center}
 \end{figure}
 
-Trong lần chấm điểm này bài tập của sinh viên đã đúng hết tất cả các bộ testcase của chương trình. Sau khi chạy hết tất các các bộ tetscase chương trình sẽ thông báo số bộ testcase không đúng của sinh viên là 0 và điểm số của sinh viên là 10.00đ.
+Trong lần chấm điểm này bài tập của sinh viên đã đúng hết tất cả các bộ testcase của chương trình. Sau khi chạy hết tất các các bộ tetscase chương trình sẽ thông báo số bộ testcase không đúng của sinh viên là 0 và điểm số của sinh viên là 10.00đ. \newpage
+
+\section{Tổng kết}
+
+Công cụ chấm điểm cho bài tập lập trình là một phần hết sức quan trọng đối với các lớp học lập trình hiện nay, đặc biệt là đối với các lớp học có số lượng học viên đông đảo cũng như các khóa học với hình thức online. Trong bài báo cáo này em đã tìm hiểu về kỹ thuật Symbolic execution, một kỹ thuật giúp tự động tạo ra các bộ test cho bài tập lập trình cũng như sử dụng các công cụ có sẵn để áp dụng cho việc sinh test tự động cho công cụ chấm điểm bài tập lập trình.
+
+Trong khoảng thời gian thực hiện nghiên cứu và tìm hiểu về đề tài, em đã đạt được kết quả như sau:
+
+\begin{itemize}
+\item[-] \textbf{Tìm hiểu về các lỗi phần mềm thường hay gặp trong bài tập lập trình.}
+\item[-] \textbf{Tìm hiểu  các lợi ích khi sử dụng công cụ chấm điểm tự động.}
+\item[-] \textbf{Tìm hiểu về kỹ thuật Symbolic execution và một số công cụ áp dụng kỹ thuật này cho việc sinh test tự động.}
+\item[-] \textbf{Tìm hiểu các thành phần của công cụ chấm điểm tự động.}
+\item[-] \textbf{Xây dựng công cụ chấm điểm đơn giản cho bài tập lập trình C.}
+\end{itemize}
+
+Ngoài những kết quả đã đạt được thì bài cáo cáo vẫn còn một số hạn chế:
+
+\begin{itemize}
+\item[-] \textbf{Chưa tự sinh được bộ test với các kiểu dữ liệu phức tạp bằng các tool có sẵn.}
+\item[-] \textbf{Công cụ chấm điểm được xây dựng còn đơn giản, chưa có nhiều ví dụ cho nhiều trường hợp hơn.}
+\end{itemize}
+
+Với các hạn chế còn tồn tại như trên em xin được đưa ra các định hướng phát triển trong tương lai cho công cụ chấm điểm. Trong thời gian tới em sẽ tìm hiểu thêm về các tool sinh test tự động để có thể áp dụng cho nhiều kiểu dữ liệu đa dạng hơn và phát triển công cụ thành một web app để có thể đưa vào sử dụng thực tế một cách hiệu quả và thực tế hơn.
+
+Trong thời gian nghiên cứu, xây dựng công cụ chấm điểm, em đã hết sức cố gắng làm việc với sự giúp đỡ tận tình của giáo viên hướng dẫn. Công cụ đã đạt được kết quả nhất định. Tuy nhiên với trình độ và kinh nghiệm còn hạn chế nên trong bài viết và công cụ vẫn còn nhiều thiếu sót. Rất mong các thầy cô giáo thông cảm và đóng góp thêm để công cụ sẽ được hoàn thiện hơn trong thời gian tới. \newpage
+
 
 \bibliographystyle{plain}
 \bibliography{tailieuthamkhao.bib}
